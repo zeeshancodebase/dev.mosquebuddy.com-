@@ -1,0 +1,858 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+/**
+ * =========================
+ * ENUMS
+ * =========================
+ */
+
+enum RoleName {
+  registered_user
+  mosque_admin
+  trusted_volunteer
+  super_admin
+}
+
+enum AccountStatus {
+  active
+  suspended
+  deleted
+}
+
+enum VenueType {
+  masjid
+  musalla
+  islamic_center
+  prayer_room
+  temporary_jumuah_venue
+  eidgah_open_ground
+  hall_community_venue
+  other
+}
+
+enum WomenPrayerSpace {
+  available
+  not_available
+  jumuah_only
+  ramadan_eid_only
+  unknown
+}
+
+enum FacilityAvailability {
+  available
+  not_available
+  limited
+  unknown
+}
+
+enum VerificationStatus {
+  verified
+  community_updated
+  needs_update
+  pending_review
+}
+
+enum PrayerName {
+  fajr
+  dhuhr
+  asr
+  maghrib
+  isha
+}
+
+enum TimingType {
+  fixed
+  relative
+}
+
+enum ReportIssueType {
+  both_times_wrong
+  azaan_time_wrong
+  jamaah_time_wrong
+  jumuah_time_wrong
+  location_wrong
+  women_prayer_info_wrong
+  facility_info_wrong
+  venue_closed_or_inactive
+  other
+}
+
+enum ReviewStatus {
+  pending
+  approved
+  rejected
+  needs_more_info
+}
+
+enum VenueSuggestionStatus {
+  pending
+  approved
+  rejected
+  duplicate
+  needs_more_info
+}
+
+enum AttachmentPurpose {
+  timing_board_photo
+  report_proof
+  venue_suggestion_proof
+  verification_evidence
+  venue_image
+  other
+}
+
+enum DevicePlatform {
+  android
+  ios
+  web
+}
+
+enum NotificationPermissionStatus {
+  not_requested
+  granted
+  denied
+  unknown
+}
+
+/**
+ * =========================
+ * USERS AND ROLES
+ * =========================
+ */
+
+model User {
+  id              String        @id @default(uuid())
+  name            String
+  email           String?       @unique
+  phone           String?       @unique
+  passwordHash    String?
+  profileImageUrl String?
+  accountStatus   AccountStatus @default(active)
+
+  userRoles         UserRole[] @relation("UserToUserRoles")
+  assignedUserRoles UserRole[] @relation("UserRoleAssignedBy")
+
+  createdVenues Venue[] @relation("VenueCreatedBy")
+
+  updatedDailyTimings  DailyPrayerTiming[] @relation("DailyTimingUpdatedBy")
+  updatedJumuahTimings JumuahTiming[]      @relation("JumuahTimingUpdatedBy")
+
+  submittedTimingReports TimingReport[] @relation("TimingReportSubmittedBy")
+  reviewedTimingReports  TimingReport[] @relation("TimingReportReviewedBy")
+
+  submittedVenueSuggestions VenueSuggestion[] @relation("VenueSuggestionSubmittedBy")
+  reviewedVenueSuggestions  VenueSuggestion[] @relation("VenueSuggestionReviewedBy")
+
+  uploadedAttachments Attachment[] @relation("AttachmentUploadedBy")
+
+  venueAdminAssignments      VenueAdminAssignment[] @relation("VenueAdminUser")
+  venueAdminAssignmentsGiven VenueAdminAssignment[] @relation("VenueAdminAssignedBy")
+
+  volunteerAssignments      VolunteerAssignment[] @relation("VolunteerUser")
+  volunteerAssignmentsGiven VolunteerAssignment[] @relation("VolunteerAssignedBy")
+
+  updateHistories   UpdateHistory[]    @relation("UpdateHistoryChangedBy")
+  adminActivityLogs AdminActivityLog[] @relation("AdminActivityActor")
+
+  deviceTokens           DeviceToken[]
+  notificationPreference NotificationPreference?
+
+  feedbacks Feedback[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        RoleName @unique
+  description String?
+
+  userRoles UserRole[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("roles")
+}
+
+model UserRole {
+  id String @id @default(uuid())
+
+  userId       String
+  roleId       String
+  assignedById String?
+
+  assignedAt DateTime @default(now())
+  isActive   Boolean  @default(true)
+
+  user       User  @relation("UserToUserRoles", fields: [userId], references: [id], onDelete: Cascade)
+  role       Role  @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  assignedBy User? @relation("UserRoleAssignedBy", fields: [assignedById], references: [id])
+
+  @@unique([userId, roleId])
+  @@index([userId])
+  @@index([roleId])
+  @@index([assignedById])
+  @@map("user_roles")
+}
+
+/**
+ * =========================
+ * LOCATION HIERARCHY
+ * Country → State → City → Area → Venue
+ * =========================
+ */
+
+model Country {
+  id          String @id @default(uuid())
+  name        String
+  countryCode String @unique
+
+  states State[]
+  venues Venue[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([name])
+  @@map("countries")
+}
+
+model State {
+  id        String @id @default(uuid())
+  countryId String
+  name      String
+
+  country Country @relation(fields: [countryId], references: [id], onDelete: Restrict)
+  cities  City[]
+  venues  Venue[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([countryId, name])
+  @@index([countryId])
+  @@map("states")
+}
+
+model City {
+  id       String  @id @default(uuid())
+  stateId  String
+  name     String
+  timezone String?
+
+  state  State   @relation(fields: [stateId], references: [id], onDelete: Restrict)
+  areas  Area[]
+  venues Venue[]
+
+  volunteerAssignments VolunteerAssignment[]
+  venueSuggestions VenueSuggestion[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([stateId, name])
+  @@index([stateId])
+  @@map("cities")
+}
+
+model Area {
+  id     String @id @default(uuid())
+  cityId String
+  name   String
+
+  city   City    @relation(fields: [cityId], references: [id], onDelete: Restrict)
+  venues Venue[]
+
+  volunteerAssignments VolunteerAssignment[]
+  venueSuggestions VenueSuggestion[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([cityId, name])
+  @@index([cityId])
+  @@map("areas")
+}
+
+/**
+ * =========================
+ * VENUES
+ * User-facing: Mosque / Masjid
+ * Backend/database: Venue
+ * =========================
+ */
+
+model Venue {
+  id             String    @id @default(uuid())
+  name           String
+  alternateNames String[]  @default([])
+  venueType      VenueType
+
+  countryId String
+  stateId   String
+  cityId    String
+  areaId    String?
+
+  address        String?
+  pincode        String?
+  latitude       Float?
+  longitude      Float?
+  googleMapsLink String?
+  phone          String?
+  timezone       String?
+
+  womenPrayerSpace       WomenPrayerSpace     @default(unknown)
+  wuduFacility           FacilityAvailability @default(unknown)
+  parking                FacilityAvailability @default(unknown)
+  defaultKhutbahLanguage String?
+  facilityNotes          String?
+  importantNotice        String?
+
+  isActive           Boolean            @default(true)
+  isPublic           Boolean            @default(false)
+  verificationStatus VerificationStatus @default(pending_review)
+  lastVerifiedAt     DateTime?
+
+  createdById String?
+
+  country   Country @relation(fields: [countryId], references: [id], onDelete: Restrict)
+  state     State   @relation(fields: [stateId], references: [id], onDelete: Restrict)
+  city      City    @relation(fields: [cityId], references: [id], onDelete: Restrict)
+  area      Area?   @relation(fields: [areaId], references: [id], onDelete: SetNull)
+  createdBy User?   @relation("VenueCreatedBy", fields: [createdById], references: [id])
+
+  dailyPrayerTimings DailyPrayerTiming[]
+  jumuahTimings      JumuahTiming[]
+
+  timingReports TimingReport[]
+  attachments   Attachment[]
+
+  approvedSuggestions VenueSuggestion[] @relation("ApprovedVenueSuggestion")
+
+  venueAdminAssignments VenueAdminAssignment[]
+  volunteerAssignments  VolunteerAssignment[]
+
+  updateHistories   UpdateHistory[]
+  adminActivityLogs AdminActivityLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([countryId])
+  @@index([stateId])
+  @@index([cityId])
+  @@index([areaId])
+  @@index([venueType])
+  @@index([isActive, isPublic])
+  @@index([verificationStatus])
+  @@index([latitude, longitude])
+  @@map("venues")
+}
+
+/**
+ * =========================
+ * DAILY PRAYER TIMINGS
+ * Fajr, Dhuhr, Asr, Maghrib, Isha
+ * Jumu‘ah is separate.
+ * Time format for MVP:
+ * Store time as 24-hour HH:mm string, example: "13:30".
+ * Relative time can use relativeTimeText, example: "5 minutes after sunset".
+ * =========================
+ */
+
+model DailyPrayerTiming {
+  id         String     @id @default(uuid())
+  venueId    String
+  prayerName PrayerName
+
+  azaanTime  String?
+  jamaahTime String?
+
+  timingType       TimingType @default(fixed)
+  relativeTimeText String?
+
+  effectiveFrom DateTime?
+  effectiveTo   DateTime?
+
+  verificationStatus VerificationStatus @default(pending_review)
+  sourceNote         String?
+  lastVerifiedAt     DateTime?
+
+  updatedById String?
+
+  venue     Venue @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  updatedBy User? @relation("DailyTimingUpdatedBy", fields: [updatedById], references: [id])
+
+  timingReports   TimingReport[]
+  attachments     Attachment[]
+  updateHistories UpdateHistory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([venueId])
+  @@index([prayerName])
+  @@index([verificationStatus])
+  @@index([effectiveFrom, effectiveTo])
+  @@map("daily_prayer_timings")
+}
+
+/**
+ * =========================
+ * JUMU‘AH TIMINGS
+ * Separate from Dhuhr.
+ * Supports multiple slots.
+ * Time format for MVP:
+ * Store time as 24-hour HH:mm string.
+ * =========================
+ */
+
+model JumuahTiming {
+  id         String @id @default(uuid())
+  venueId    String
+  slotNumber Int
+
+  azaanTime   String?
+  khutbahTime String?
+  jamaahTime  String
+
+  khutbahLanguage  String?
+  womenPrayerSpace WomenPrayerSpace @default(unknown)
+  importantNotice  String?
+
+  effectiveFrom DateTime?
+  effectiveTo   DateTime?
+
+  verificationStatus VerificationStatus @default(pending_review)
+  sourceNote         String?
+  lastVerifiedAt     DateTime?
+
+  updatedById String?
+
+  venue     Venue @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  updatedBy User? @relation("JumuahTimingUpdatedBy", fields: [updatedById], references: [id])
+
+  timingReports   TimingReport[]
+  attachments     Attachment[]
+  updateHistories UpdateHistory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([venueId])
+  @@index([slotNumber])
+  @@index([verificationStatus])
+  @@index([effectiveFrom, effectiveTo])
+  @@map("jumuah_timings")
+}
+
+/**
+ * =========================
+ * TIMING REPORTS
+ * Normal users report wrong/missing/doubtful timings.
+ * Public timing does not change until reviewed.
+ * =========================
+ */
+
+model TimingReport {
+  id String @id @default(uuid())
+
+  venueId        String
+  dailyTimingId  String?
+  jumuahTimingId String?
+
+  prayerName PrayerName?
+  issueType  ReportIssueType
+
+  currentAzaanTime     String?
+  currentJamaahTime    String?
+  suggestedAzaanTime   String?
+  suggestedJamaahTime  String?
+  suggestedKhutbahTime String?
+
+  userNote String?
+  status   ReviewStatus @default(pending)
+
+  submittedById String?
+  reviewedById  String?
+  reviewNote    String?
+  resolvedAt    DateTime?
+
+  venue        Venue              @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  dailyTiming  DailyPrayerTiming? @relation(fields: [dailyTimingId], references: [id], onDelete: SetNull)
+  jumuahTiming JumuahTiming?      @relation(fields: [jumuahTimingId], references: [id], onDelete: SetNull)
+
+  submittedBy User? @relation("TimingReportSubmittedBy", fields: [submittedById], references: [id])
+  reviewedBy  User? @relation("TimingReportReviewedBy", fields: [reviewedById], references: [id])
+
+  attachments Attachment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([venueId])
+  @@index([dailyTimingId])
+  @@index([jumuahTimingId])
+  @@index([submittedById])
+  @@index([reviewedById])
+  @@index([status])
+  @@index([issueType])
+  @@map("timing_reports")
+}
+
+/**
+ * =========================
+ * VENUE SUGGESTIONS
+ * Missing mosque/prayer venue suggestions.
+ * Suggested venues do not become public automatically.
+ * =========================
+ */
+
+model VenueSuggestion {
+  id String @id @default(uuid())
+
+  suggestedName String
+  venueType     VenueType?
+
+  address        String?
+  areaText       String?
+  cityText       String?
+  cityId String?
+  city   City?   @relation(fields: [cityId], references: [id], onDelete: SetNull)
+
+  areaId String?
+  area   Area?   @relation(fields: [areaId], references: [id], onDelete: SetNull)
+  stateText      String?
+  countryText    String?
+  pincode        String?
+  googleMapsLink String?
+  latitude       Float?
+  longitude      Float?
+  phone          String?
+
+  optionalTimingNote String?
+  userNote           String?
+
+  status VenueSuggestionStatus @default(pending)
+
+  submittedById   String?
+  reviewedById    String?
+  approvedVenueId String?
+  reviewNote      String?
+  resolvedAt      DateTime?
+
+  submittedBy   User?  @relation("VenueSuggestionSubmittedBy", fields: [submittedById], references: [id])
+  reviewedBy    User?  @relation("VenueSuggestionReviewedBy", fields: [reviewedById], references: [id])
+  approvedVenue Venue? @relation("ApprovedVenueSuggestion", fields: [approvedVenueId], references: [id])
+
+  attachments Attachment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([submittedById])
+  @@index([reviewedById])
+  @@index([approvedVenueId])
+  @@index([status])
+  @@index([venueType])
+  @@map("venue_suggestions")
+}
+
+/**
+ * =========================
+ * ATTACHMENTS / PROOF FILES
+ * Actual files live in Supabase Storage.
+ * DB stores file metadata and references.
+ * =========================
+ */
+
+model Attachment {
+  id String @id @default(uuid())
+
+  fileUrl  String
+  filePath String?
+  fileType String?
+  fileName String?
+  fileSize Int?
+
+  uploadedById String?
+
+  venueId           String?
+  dailyTimingId     String?
+  jumuahTimingId    String?
+  timingReportId    String?
+  venueSuggestionId String?
+
+  purpose AttachmentPurpose @default(other)
+
+  uploadedBy      User?              @relation("AttachmentUploadedBy", fields: [uploadedById], references: [id])
+  venue           Venue?             @relation(fields: [venueId], references: [id], onDelete: SetNull)
+  dailyTiming     DailyPrayerTiming? @relation(fields: [dailyTimingId], references: [id], onDelete: SetNull)
+  jumuahTiming    JumuahTiming?      @relation(fields: [jumuahTimingId], references: [id], onDelete: SetNull)
+  timingReport    TimingReport?      @relation(fields: [timingReportId], references: [id], onDelete: SetNull)
+  venueSuggestion VenueSuggestion?   @relation(fields: [venueSuggestionId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([uploadedById])
+  @@index([venueId])
+  @@index([dailyTimingId])
+  @@index([jumuahTimingId])
+  @@index([timingReportId])
+  @@index([venueSuggestionId])
+  @@index([purpose])
+  @@map("attachments")
+}
+
+/**
+ * =========================
+ * VENUE ADMIN ASSIGNMENTS
+ * Controls which mosque admin can manage which venue.
+ * =========================
+ */
+
+model VenueAdminAssignment {
+  id String @id @default(uuid())
+
+  userId  String
+  venueId String
+
+  canEditVenueProfile  Boolean @default(true)
+  canEditDailyTimings  Boolean @default(true)
+  canEditJumuahTimings Boolean @default(true)
+  canReviewReports     Boolean @default(false)
+  canMarkVerified      Boolean @default(true)
+
+  assignedById String?
+  assignedAt   DateTime @default(now())
+  isActive     Boolean  @default(true)
+
+  user       User  @relation("VenueAdminUser", fields: [userId], references: [id], onDelete: Cascade)
+  venue      Venue @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  assignedBy User? @relation("VenueAdminAssignedBy", fields: [assignedById], references: [id])
+
+  @@unique([userId, venueId])
+  @@index([userId])
+  @@index([venueId])
+  @@index([assignedById])
+  @@index([isActive])
+  @@map("venue_admin_assignments")
+}
+
+/**
+ * =========================
+ * VOLUNTEER ASSIGNMENTS
+ * Volunteer can be assigned to venue, area, or city.
+ * =========================
+ */
+
+model VolunteerAssignment {
+  id String @id @default(uuid())
+
+  userId  String
+  venueId String?
+  areaId  String?
+  cityId  String?
+
+  canVerifyTimings     Boolean @default(true)
+  canUpdateTimings     Boolean @default(false)
+  canReviewReports     Boolean @default(false)
+  canReviewSuggestions Boolean @default(false)
+
+  assignedById String?
+  assignedAt   DateTime @default(now())
+  isActive     Boolean  @default(true)
+
+  user       User   @relation("VolunteerUser", fields: [userId], references: [id], onDelete: Cascade)
+  venue      Venue? @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  area       Area?  @relation(fields: [areaId], references: [id], onDelete: Cascade)
+  city       City?  @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  assignedBy User?  @relation("VolunteerAssignedBy", fields: [assignedById], references: [id])
+
+  @@index([userId])
+  @@index([venueId])
+  @@index([areaId])
+  @@index([cityId])
+  @@index([assignedById])
+  @@index([isActive])
+  @@map("volunteer_assignments")
+}
+
+/**
+ * =========================
+ * NOTIFICATION FOUNDATION
+ * Lightweight MVP foundation only.
+ * =========================
+ */
+
+model DeviceToken {
+  id String @id @default(uuid())
+
+  userId            String?
+  anonymousDeviceId String?
+
+  deviceToken      String                       @unique
+  platform         DevicePlatform
+  permissionStatus NotificationPermissionStatus @default(unknown)
+
+  isActive   Boolean   @default(true)
+  lastUsedAt DateTime?
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([anonymousDeviceId])
+  @@index([platform])
+  @@index([permissionStatus])
+  @@index([isActive])
+  @@map("device_tokens")
+}
+
+model NotificationPreference {
+  id String @id @default(uuid())
+
+  userId String @unique
+
+  notificationsEnabled             Boolean @default(false)
+  prayerRemindersEnabled           Boolean @default(false)
+  jumuahRemindersEnabled           Boolean @default(false)
+  announcementNotificationsEnabled Boolean @default(false)
+
+  preferredReminderMinutesBefore Int @default(15)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("notification_preferences")
+}
+
+/**
+ * =========================
+ * TRUST / UPDATE HISTORY
+ * Tracks important data changes.
+ * =========================
+ */
+
+model UpdateHistory {
+  id String @id @default(uuid())
+
+  entityType String
+  entityId   String
+
+  venueId        String?
+  dailyTimingId  String?
+  jumuahTimingId String?
+
+  fieldName String?
+  oldValue  String?
+  newValue  String?
+
+  changedById String?
+  sourceNote  String?
+
+  venue        Venue?             @relation(fields: [venueId], references: [id], onDelete: SetNull)
+  dailyTiming  DailyPrayerTiming? @relation(fields: [dailyTimingId], references: [id], onDelete: SetNull)
+  jumuahTiming JumuahTiming?      @relation(fields: [jumuahTimingId], references: [id], onDelete: SetNull)
+  changedBy    User?              @relation("UpdateHistoryChangedBy", fields: [changedById], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([entityType])
+  @@index([entityId])
+  @@index([venueId])
+  @@index([dailyTimingId])
+  @@index([jumuahTimingId])
+  @@index([changedById])
+  @@map("update_history")
+}
+
+/**
+ * =========================
+ * ADMIN ACTIVITY LOGS
+ * Tracks administrative actions.
+ * =========================
+ */
+
+model AdminActivityLog {
+  id String @id @default(uuid())
+
+  actorId String
+
+  action     String
+  entityType String
+  entityId   String?
+  venueId    String?
+
+  metadata Json?
+
+  actor User   @relation("AdminActivityActor", fields: [actorId], references: [id], onDelete: Cascade)
+  venue Venue? @relation(fields: [venueId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([actorId])
+  @@index([action])
+  @@index([entityType])
+  @@index([entityId])
+  @@index([venueId])
+  @@map("admin_activity_logs")
+}
+
+/**
+ * =========================
+ * Feedback
+ * =========================
+ */
+
+enum FeedbackType {
+  general
+  bug
+  feature_request
+  data_quality
+  other
+}
+
+enum FeedbackStatus {
+  open
+  resolved
+}
+
+model Feedback {
+  id String @id @default(uuid())
+
+  type    FeedbackType @default(general)
+  message String
+  rating  Int?
+
+  submittedById String?
+  submittedBy   User?   @relation(fields: [submittedById], references: [id])
+
+  status       FeedbackStatus @default(open)
+  internalNote String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([type])
+  @@index([status])
+  @@index([submittedById])
+  @@index([createdAt])
+  @@map("feedback")
+}
