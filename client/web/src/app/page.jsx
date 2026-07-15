@@ -1017,6 +1017,28 @@ export default function LandingPage() {
               © {new Date().getFullYear()} {APP_CONFIG.name}. All rights reserved.
             </p>
           </div>
+          {/* Legal links */}
+          <div
+            className="flex items-center justify-center gap-6 mt-8 pt-6"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+          >
+            {[
+              { label: "Privacy Policy", href: "/privacy-policy" },
+              { label: "Terms of Use", href: "/terms" },
+              { label: "Delete Account", href: "/delete-account" },
+            ].map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-xs transition-colors"
+                style={{ color: "rgba(255,255,255,0.35)" }}
+                onMouseEnter={(e) => e.currentTarget.style.color = "rgba(255,255,255,0.7)"}
+                onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,0.35)"}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
         </div>
       </footer>
     </div>
