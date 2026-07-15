@@ -8,13 +8,26 @@
 //   tagline: "Mosque & Prayer Timing Management",
 //   version: "1.0.0",
 // };
+// export const APP_CONFIG = {
+//   name: "Sabeel",
+//   nameFull: "Sabeel Admin",
+//   nameArabic: "سبيل",
+//   tagline: "Mosque & Prayer Timing Management",
+//   taglinePublic: "Find nearby mosques and never miss a Jamā'ah",
+//   descriptionPublic: "Sabeel helps Muslims find accurate mosque timings, Jumu'ah slots, and directions — all in one place.",
+//   appStoreLink: "#",        // placeholder
+//   playStoreLink: "#",       // placeholder
+//   mosqueAdminLink: "/login", // mosque admins go to admin login
+//   version: "1.0.0",
+// };
+
 export const APP_CONFIG = {
-  name: "Sabeel",
-  nameFull: "Sabeel Admin",
-  nameArabic: "سبيل",
+  name: "MosqueBuddy",
+  nameFull: "MosqueBuddy Admin",
+  nameArabic: "مسجد کا ساتھی",
   tagline: "Mosque & Prayer Timing Management",
   taglinePublic: "Find nearby mosques and never miss a Jamā'ah",
-  descriptionPublic: "Sabeel helps Muslims find accurate mosque timings, Jumu'ah slots, and directions — all in one place.",
+  descriptionPublic: "MosqueBuddy helps Muslims find accurate mosque timings, Jumu'ah slots, and directions — all in one place.",
   appStoreLink: "#",        // placeholder
   playStoreLink: "#",       // placeholder
   mosqueAdminLink: "/login", // mosque admins go to admin login

@@ -2,7 +2,7 @@
 // client\mobile\src\constants\index.js
 export const APP_CONFIG = {
   name: "MosqueBuddy",
-  nameArabic: "مسجد کا ساتھی ",
+  nameArabic: "مسجد کا ساتھی",
   tagline: "Find nearby mosques and never miss a Jamā'ah",
 
 //   رفيق المسجد (Rafiq al-Masjid) — "companion of the mosque"
