@@ -57,6 +57,7 @@
 // src/components/layout/AdminLayout.jsx
 "use client";
 
+import { Suspense } from "react";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 
@@ -64,7 +65,8 @@ export default function AdminLayout({ children, pendingReports = 0 }) {
   return (
     <div className="flex h-screen overflow-hidden" style={{ backgroundColor: "#F8FAF9" }}>
       {/* Sidebar */}
-      <Sidebar pendingReports={pendingReports} />
+      <Suspense fallback={<div className="w-60" />}>
+      <Sidebar pendingReports={pendingReports} /></Suspense>
 
       {/* Main area */}
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
