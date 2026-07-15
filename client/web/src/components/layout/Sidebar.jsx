@@ -158,9 +158,6 @@ export default function Sidebar({ pendingReports = 0, openFeedback = 0 }) {
     setExpanded((prev) => ({ ...prev, [href]: !prev[href] }));
   }
 
-  function isActive(href) {
-    return pathname === href || pathname.startsWith(href + "/");
-  }
 
   return (
     <aside
