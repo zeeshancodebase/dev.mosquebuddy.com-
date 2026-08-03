@@ -105,7 +105,7 @@ export default function JumuahSlotFormSheet({
     <Modal visible={visible} animationType="slide" transparent statusBarTranslucent onRequestClose={onClose}>
       <View style={styles.backdrop}>
         <TouchableOpacity style={StyleSheet.absoluteFill} activeOpacity={1} onPress={onClose} />
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.sheet}>
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.sheet}>
           <View style={styles.handle} />
           <Text style={styles.title}>
             {isEditing ? `Edit Slot ${values.slotNumber || ""}` : "Add Jumu'ah Slot"}

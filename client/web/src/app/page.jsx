@@ -4,10 +4,22 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
-  MapPin, Clock, CheckCircle, Navigation,
-  ChevronRight, Star, Users, Building2,
-  Smartphone, Globe, Shield, ArrowRight,
-  Menu, X, Moon, Search,
+  MapPin,
+  Clock,
+  CheckCircle,
+  Navigation,
+  ChevronRight,
+  Star,
+  Users,
+  Building2,
+  Smartphone,
+  Globe,
+  Shield,
+  ArrowRight,
+  Menu,
+  X,
+  Moon,
+  Search,
 } from "lucide-react";
 import { APP_CONFIG } from "@/lib/constants";
 
@@ -17,8 +29,10 @@ function useReveal() {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { threshold: 0.15 }
+      ([entry]) => {
+        if (entry.isIntersecting) setVisible(true);
+      },
+      { threshold: 0.15 },
     );
     if (ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
@@ -52,24 +66,72 @@ function IslamicPattern() {
       xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
-        <pattern id="islamic" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+        <pattern
+          id="islamic"
+          x="0"
+          y="0"
+          width="80"
+          height="80"
+          patternUnits="userSpaceOnUse"
+        >
           <path
             d="M40 0 L80 40 L40 80 L0 40 Z"
-            fill="none" stroke="white" strokeWidth="0.5"
+            fill="none"
+            stroke="white"
+            strokeWidth="0.5"
           />
           <path
             d="M40 10 L70 40 L40 70 L10 40 Z"
-            fill="none" stroke="white" strokeWidth="0.5"
+            fill="none"
+            stroke="white"
+            strokeWidth="0.5"
           />
           <path
             d="M40 20 L60 40 L40 60 L20 40 Z"
-            fill="none" stroke="white" strokeWidth="0.5"
+            fill="none"
+            stroke="white"
+            strokeWidth="0.5"
           />
-          <circle cx="40" cy="40" r="3" fill="none" stroke="white" strokeWidth="0.5" />
-          <circle cx="0" cy="0" r="3" fill="none" stroke="white" strokeWidth="0.5" />
-          <circle cx="80" cy="0" r="3" fill="none" stroke="white" strokeWidth="0.5" />
-          <circle cx="0" cy="80" r="3" fill="none" stroke="white" strokeWidth="0.5" />
-          <circle cx="80" cy="80" r="3" fill="none" stroke="white" strokeWidth="0.5" />
+          <circle
+            cx="40"
+            cy="40"
+            r="3"
+            fill="none"
+            stroke="white"
+            strokeWidth="0.5"
+          />
+          <circle
+            cx="0"
+            cy="0"
+            r="3"
+            fill="none"
+            stroke="white"
+            strokeWidth="0.5"
+          />
+          <circle
+            cx="80"
+            cy="0"
+            r="3"
+            fill="none"
+            stroke="white"
+            strokeWidth="0.5"
+          />
+          <circle
+            cx="0"
+            cy="80"
+            r="3"
+            fill="none"
+            stroke="white"
+            strokeWidth="0.5"
+          />
+          <circle
+            cx="80"
+            cy="80"
+            r="3"
+            fill="none"
+            stroke="white"
+            strokeWidth="0.5"
+          />
         </pattern>
       </defs>
       <rect width="100%" height="100%" fill="url(#islamic)" />
@@ -90,14 +152,14 @@ function Orb({ className }) {
 // ── Phone mockup ──────────────────────────────────────────
 function PhoneMockup() {
   return (
-    <div
-      className="relative mx-auto"
-      style={{ width: 260, height: 520 }}
-    >
+    <div className="relative mx-auto" style={{ width: 260, height: 520 }}>
       {/* Glow behind phone */}
       <div
         className="absolute inset-0 rounded-[40px] blur-2xl opacity-30"
-        style={{ background: "#059669", transform: "scale(0.85) translateY(20px)" }}
+        style={{
+          background: "#059669",
+          transform: "scale(0.85) translateY(20px)",
+        }}
       />
 
       {/* Phone shell */}
@@ -106,12 +168,15 @@ function PhoneMockup() {
         style={{
           background: "linear-gradient(145deg, #1a1a2e, #0f3d2e)",
           borderColor: "#2D5A45",
-          boxShadow: "0 40px 80px -20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1)",
+          boxShadow:
+            "0 40px 80px -20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1)",
         }}
       >
         {/* Status bar */}
         <div className="flex justify-between items-center px-6 pt-4 pb-2">
-          <span className="text-white text-xs font-medium opacity-70">9:41</span>
+          <span className="text-white text-xs font-medium opacity-70">
+            9:41
+          </span>
           <div className="w-20 h-5 rounded-full bg-black flex items-center justify-center">
             <div className="w-2 h-2 rounded-full bg-gray-600" />
           </div>
@@ -151,30 +216,61 @@ function PhoneMockup() {
           </div>
 
           {/* Mosque cards */}
-          <p className="text-white text-xs font-semibold mb-2 opacity-70">NEARBY MOSQUES</p>
+          <p className="text-white text-xs font-semibold mb-2 opacity-70">
+            NEARBY MOSQUES
+          </p>
           {[
-            { name: "Masjid Al-Noor", area: "BTM Layout", time: "4:45 PM", dist: "0.8 km", verified: true },
-            { name: "Masjid Ibrahim", area: "Jayanagar", time: "4:50 PM", dist: "1.2 km", verified: true },
-            { name: "Islamic Center", area: "Koramangala", time: "5:00 PM", dist: "2.1 km", verified: false },
+            {
+              name: "Masjid Al-Noor",
+              area: "BTM Layout",
+              time: "4:45 PM",
+              dist: "0.8 km",
+              verified: true,
+            },
+            {
+              name: "Masjid Ibrahim",
+              area: "Jayanagar",
+              time: "4:50 PM",
+              dist: "1.2 km",
+              verified: true,
+            },
+            {
+              name: "Islamic Center",
+              area: "Koramangala",
+              time: "5:00 PM",
+              dist: "2.1 km",
+              verified: false,
+            },
           ].map((mosque, i) => (
             <div
               key={i}
               className="rounded-xl p-3 mb-2 flex items-center justify-between"
-              style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)" }}
+              style={{
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.08)",
+              }}
             >
               <div className="flex items-center gap-2">
                 <div className="w-7 h-7 rounded-lg bg-emerald-900 flex items-center justify-center">
                   <Building2 size={12} className="text-emerald-400" />
                 </div>
                 <div>
-                  <p className="text-white text-xs font-semibold">{mosque.name}</p>
-                  <p className="text-xs opacity-50 text-white">{mosque.area} · {mosque.dist}</p>
+                  <p className="text-white text-xs font-semibold">
+                    {mosque.name}
+                  </p>
+                  <p className="text-xs opacity-50 text-white">
+                    {mosque.area} · {mosque.dist}
+                  </p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-emerald-400 text-xs font-mono font-bold">{mosque.time}</p>
+                <p className="text-emerald-400 text-xs font-mono font-bold">
+                  {mosque.time}
+                </p>
                 {mosque.verified && (
-                  <p className="text-emerald-500 text-xs opacity-70">✓ verified</p>
+                  <p className="text-emerald-500 text-xs opacity-70">
+                    ✓ verified
+                  </p>
                 )}
               </div>
             </div>
@@ -222,7 +318,9 @@ function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    function onScroll() { setScrolled(window.scrollY > 20); }
+    function onScroll() {
+      setScrolled(window.scrollY > 20);
+    }
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -243,8 +341,15 @@ function Navbar() {
             <Building2 size={16} className="text-white" />
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="text-white font-bold text-sm">{APP_CONFIG.name}</span>
-            <span className="text-xs" style={{ color: "#34D399", lineHeight: 1 }}>{APP_CONFIG.nameArabic}</span>
+            <span className="text-white font-bold text-sm">
+              {APP_CONFIG.name}
+            </span>
+            <span
+              className="text-xs"
+              style={{ color: "#34D399", lineHeight: 1 }}
+            >
+              {APP_CONFIG.nameArabic}
+            </span>
           </div>
         </div>
 
@@ -255,13 +360,15 @@ function Navbar() {
             { label: "For Mosques", href: "#mosques" },
             { label: "How it works", href: "#how" },
           ].map((item) => (
-             <a
+            <a
               key={item.label}
               href={item.href}
               className="text-sm font-medium transition-colors duration-200"
               style={{ color: "rgba(255,255,255,0.65)" }}
-              onMouseEnter={(e) => e.currentTarget.style.color = "white"}
-              onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,0.65)"}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "white")}
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.color = "rgba(255,255,255,0.65)")
+              }
             >
               {item.label}
             </a>
@@ -274,8 +381,8 @@ function Navbar() {
             href="#download"
             className="px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all duration-200"
             style={{ background: "#059669" }}
-            onMouseEnter={(e) => e.currentTarget.style.background = "#047857"}
-            onMouseLeave={(e) => e.currentTarget.style.background = "#059669"}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "#047857")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "#059669")}
           >
             Download App
           </a>
@@ -306,7 +413,10 @@ function Navbar() {
               href={item.href}
               onClick={() => setMobileOpen(false)}
               className="block py-3 text-sm font-medium border-b"
-              style={{ color: "rgba(255,255,255,0.7)", borderColor: "rgba(255,255,255,0.06)" }}
+              style={{
+                color: "rgba(255,255,255,0.7)",
+                borderColor: "rgba(255,255,255,0.06)",
+              }}
             >
               {item.label}
             </a>
@@ -328,8 +438,10 @@ function Navbar() {
 // ── Main page ─────────────────────────────────────────────
 export default function LandingPage() {
   return (
-    <div className="overflow-x-hidden" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
-
+    <div
+      className="overflow-x-hidden"
+      style={{ fontFamily: "Inter, system-ui, sans-serif" }}
+    >
       {/* Global animation keyframes */}
       <style>{`
         @keyframes float {
@@ -352,7 +464,10 @@ export default function LandingPage() {
       {/* ── HERO ───────────────────────────────────────── */}
       <section
         className="relative min-h-screen flex items-center overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #0C1A14 0%, #0a2018 50%, #071510 100%)" }}
+        style={{
+          background:
+            "linear-gradient(135deg, #0C1A14 0%, #0a2018 50%, #071510 100%)",
+        }}
       >
         <IslamicPattern />
         <Orb className="w-96 h-96 -top-20 -left-20" />
@@ -398,7 +513,8 @@ export default function LandingPage() {
               className="text-lg leading-relaxed mb-10 max-w-lg"
               style={{ color: "rgba(255,255,255,0.6)" }}
             >
-              {APP_CONFIG.descriptionPublic} Real timings. Verified sources. For every Muslim, everywhere.
+              {APP_CONFIG.descriptionPublic} Real timings. Verified sources. For
+              every Muslim, everywhere.
             </p>
 
             {/* CTAs */}
@@ -411,8 +527,12 @@ export default function LandingPage() {
                   boxShadow: "0 8px 32px rgba(5,150,105,0.35)",
                   animation: "pulse-glow 3s ease-in-out infinite",
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.transform = "translateY(-2px)"}
-                onMouseLeave={(e) => e.currentTarget.style.transform = "translateY(0)"}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "translateY(-2px)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "translateY(0)")
+                }
               >
                 <Smartphone size={20} />
                 <div className="text-left">
@@ -420,8 +540,7 @@ export default function LandingPage() {
                   <p className="text-sm font-bold leading-tight">Google Play</p>
                 </div>
               </a>
-<a
-              
+              <a
                 href={APP_CONFIG.appStoreLink}
                 className="flex items-center gap-3 px-6 py-3.5 rounded-2xl font-semibold transition-all duration-200"
                 style={{
@@ -440,7 +559,9 @@ export default function LandingPage() {
               >
                 <Globe size={20} />
                 <div className="text-left">
-                  <p className="text-xs opacity-75 leading-tight">Coming soon on</p>
+                  <p className="text-xs opacity-75 leading-tight">
+                    Coming soon on
+                  </p>
                   <p className="text-sm font-bold leading-tight">App Store</p>
                 </div>
               </a>
@@ -455,7 +576,12 @@ export default function LandingPage() {
               ].map((stat) => (
                 <div key={stat.label}>
                   <p className="text-2xl font-black text-white">{stat.value}</p>
-                  <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.45)" }}>{stat.label}</p>
+                  <p
+                    className="text-xs mt-0.5"
+                    style={{ color: "rgba(255,255,255,0.45)" }}
+                  >
+                    {stat.label}
+                  </p>
                 </div>
               ))}
             </div>
@@ -469,7 +595,9 @@ export default function LandingPage() {
 
         {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-          <p className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>Scroll to explore</p>
+          <p className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>
+            Scroll to explore
+          </p>
           <div
             className="w-5 h-8 rounded-full border flex items-start justify-center pt-1.5"
             style={{ borderColor: "rgba(255,255,255,0.2)" }}
@@ -491,7 +619,11 @@ export default function LandingPage() {
           <Reveal>
             <div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold mb-6"
-              style={{ background: "#ECFDF5", color: "#059669", border: "1px solid #A7F3D0" }}
+              style={{
+                background: "#ECFDF5",
+                color: "#059669",
+                border: "1px solid #A7F3D0",
+              }}
             >
               <Moon size={13} />
               The real problem
@@ -503,8 +635,14 @@ export default function LandingPage() {
               Muslims shouldn't have to
               <span style={{ color: "#059669" }}> guess</span> prayer times
             </h2>
-            <p className="text-lg leading-relaxed max-w-2xl mx-auto" style={{ color: "#6B7280" }}>
-              General prayer apps show calculated times — not the actual Jamā'ah time at your local mosque. Every mosque sets its own timing. Finding the right one means calling ahead, checking WhatsApp groups, or showing up and hoping.
+            <p
+              className="text-lg leading-relaxed max-w-2xl mx-auto"
+              style={{ color: "#6B7280" }}
+            >
+              General prayer apps show calculated times — not the actual Jamā'ah
+              time at your local mosque. Every mosque sets its own timing.
+              Finding the right one means calling ahead, checking WhatsApp
+              groups, or showing up and hoping.
             </p>
           </Reveal>
 
@@ -543,8 +681,12 @@ export default function LandingPage() {
                       border: "1px solid #E5E7EB",
                       boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.transform = "translateY(-4px)"}
-                    onMouseLeave={(e) => e.currentTarget.style.transform = "translateY(0)"}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.transform = "translateY(-4px)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.transform = "translateY(0)")
+                    }
                   >
                     <div
                       className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
@@ -552,8 +694,12 @@ export default function LandingPage() {
                     >
                       <Icon size={20} style={{ color: item.color }} />
                     </div>
-                    <h3 className="text-sm font-bold text-gray-900 mb-2">{item.title}</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
+                    <h3 className="text-sm font-bold text-gray-900 mb-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">
+                      {item.desc}
+                    </p>
                   </div>
                 </Reveal>
               );
@@ -569,7 +715,11 @@ export default function LandingPage() {
             <div className="text-center mb-16">
               <div
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold mb-6"
-                style={{ background: "#ECFDF5", color: "#059669", border: "1px solid #A7F3D0" }}
+                style={{
+                  background: "#ECFDF5",
+                  color: "#059669",
+                  border: "1px solid #A7F3D0",
+                }}
               >
                 Simple as 1, 2, 3
               </div>
@@ -589,7 +739,9 @@ export default function LandingPage() {
             {/* Connector line */}
             <div
               className="hidden md:block absolute top-10 left-1/3 right-1/3 h-px"
-              style={{ background: "linear-gradient(90deg, #059669, #34D399, #059669)" }}
+              style={{
+                background: "linear-gradient(90deg, #059669, #34D399, #059669)",
+              }}
             />
 
             {[
@@ -631,8 +783,12 @@ export default function LandingPage() {
                         {i + 1}
                       </span>
                     </div>
-                    <h3 className="text-base font-bold text-gray-900 mb-2">{item.title}</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
+                    <h3 className="text-base font-bold text-gray-900 mb-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">
+                      {item.desc}
+                    </p>
                   </div>
                 </Reveal>
               );
@@ -642,13 +798,21 @@ export default function LandingPage() {
       </section>
 
       {/* ── FEATURES ───────────────────────────────────── */}
-      <section id="features" className="py-24" style={{ background: "#F8FAF9" }}>
+      <section
+        id="features"
+        className="py-24"
+        style={{ background: "#F8FAF9" }}
+      >
         <div className="max-w-6xl mx-auto px-6">
           <Reveal>
             <div className="text-center mb-16">
               <div
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold mb-6"
-                style={{ background: "#ECFDF5", color: "#059669", border: "1px solid #A7F3D0" }}
+                style={{
+                  background: "#ECFDF5",
+                  color: "#059669",
+                  border: "1px solid #A7F3D0",
+                }}
               >
                 Everything you need
               </div>
@@ -659,7 +823,8 @@ export default function LandingPage() {
                 Built for Muslim life
               </h2>
               <p className="text-gray-500 max-w-xl mx-auto">
-                Every feature is designed around one goal — helping you pray in congregation, on time, every day.
+                Every feature is designed around one goal — helping you pray in
+                congregation, on time, every day.
               </p>
             </div>
           </Reveal>
@@ -670,55 +835,73 @@ export default function LandingPage() {
                 icon: MapPin,
                 title: "Mosque Discovery",
                 desc: "Find every mosque, musalla, Islamic center, and prayer room near you. All venue types supported.",
-                color: "#059669", bg: "#ECFDF5", tag: "Core",
+                color: "#059669",
+                bg: "#ECFDF5",
+                tag: "Core",
               },
               {
                 icon: Clock,
                 title: "Real Jamā'ah Timings",
                 desc: "Actual congregation times from mosque admins — not astronomical calculations. For all 5 daily prayers.",
-                color: "#2563EB", bg: "#EFF6FF", tag: "Core",
+                color: "#2563EB",
+                bg: "#EFF6FF",
+                tag: "Core",
               },
               {
                 icon: Star,
                 title: "Jumu'ah Timings",
                 desc: "Multiple Friday prayer slots, khutbah times, language information, and women's space availability.",
-                color: "#7C3AED", bg: "#F5F3FF", tag: "Core",
+                color: "#7C3AED",
+                bg: "#F5F3FF",
+                tag: "Core",
               },
               {
                 icon: CheckCircle,
                 title: "Verified Data",
                 desc: "Every timing shows its verification status — Verified, Community Updated, or Needs Update.",
-                color: "#059669", bg: "#ECFDF5", tag: "Trust",
+                color: "#059669",
+                bg: "#ECFDF5",
+                tag: "Trust",
               },
               {
                 icon: Navigation,
                 title: "One-tap Directions",
                 desc: "Instantly open directions to any mosque. Never get lost looking for a new masjid.",
-                color: "#EA580C", bg: "#FFF7ED", tag: "Convenience",
+                color: "#EA580C",
+                bg: "#FFF7ED",
+                tag: "Convenience",
               },
               {
                 icon: Users,
                 title: "Women's Space Info",
                 desc: "Know in advance whether a mosque has space for women, for Jumu'ah or daily prayers.",
-                color: "#D97706", bg: "#FFFBEB", tag: "Inclusivity",
+                color: "#D97706",
+                bg: "#FFFBEB",
+                tag: "Inclusivity",
               },
               {
                 icon: Building2,
                 title: "Venue Profiles",
                 desc: "Wudu facilities, parking, contact info, important notices — everything before you arrive.",
-                color: "#0891B2", bg: "#ECFEFF", tag: "Info",
+                color: "#0891B2",
+                bg: "#ECFEFF",
+                tag: "Info",
               },
               {
                 icon: Shield,
                 title: "Report & Correct",
                 desc: "Wrong timing? Report it in seconds. Community-driven accuracy with admin oversight.",
-                color: "#DC2626", bg: "#FEF2F2", tag: "Community",
+                color: "#DC2626",
+                bg: "#FEF2F2",
+                tag: "Community",
               },
               {
                 icon: Moon,
                 title: "Ramadan & Eid",
                 desc: "Special timings for Tarawih, Qiyam, and Eid prayers. Coming soon.",
-                color: "#7C3AED", bg: "#F5F3FF", tag: "Coming Soon",
+                color: "#7C3AED",
+                bg: "#F5F3FF",
+                tag: "Coming Soon",
               },
             ].map((feature, i) => {
               const Icon = feature.icon;
@@ -733,11 +916,13 @@ export default function LandingPage() {
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform = "translateY(-4px)";
-                      e.currentTarget.style.boxShadow = "0 12px 32px rgba(0,0,0,0.08)";
+                      e.currentTarget.style.boxShadow =
+                        "0 12px 32px rgba(0,0,0,0.08)";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.04)";
+                      e.currentTarget.style.boxShadow =
+                        "0 2px 8px rgba(0,0,0,0.04)";
                     }}
                   >
                     <div className="flex items-start justify-between mb-4">
@@ -750,15 +935,25 @@ export default function LandingPage() {
                       <span
                         className="text-xs font-semibold px-2.5 py-1 rounded-full"
                         style={{
-                          background: feature.tag === "Coming Soon" ? "#F5F3FF" : "#F3F4F6",
-                          color: feature.tag === "Coming Soon" ? "#7C3AED" : "#6B7280",
+                          background:
+                            feature.tag === "Coming Soon"
+                              ? "#F5F3FF"
+                              : "#F3F4F6",
+                          color:
+                            feature.tag === "Coming Soon"
+                              ? "#7C3AED"
+                              : "#6B7280",
                         }}
                       >
                         {feature.tag}
                       </span>
                     </div>
-                    <h3 className="text-sm font-bold text-gray-900 mb-2">{feature.title}</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed">{feature.desc}</p>
+                    <h3 className="text-sm font-bold text-gray-900 mb-2">
+                      {feature.title}
+                    </h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">
+                      {feature.desc}
+                    </p>
                   </div>
                 </Reveal>
               );
@@ -771,7 +966,9 @@ export default function LandingPage() {
       <section
         id="mosques"
         className="py-24 relative overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #0C1A14 0%, #0a2018 100%)" }}
+        style={{
+          background: "linear-gradient(135deg, #0C1A14 0%, #0a2018 100%)",
+        }}
       >
         <IslamicPattern />
         <Orb className="w-96 h-96 -bottom-20 -right-20" />
@@ -782,7 +979,11 @@ export default function LandingPage() {
               <div>
                 <div
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold mb-6"
-                  style={{ background: "rgba(5,150,105,0.15)", border: "1px solid rgba(5,150,105,0.3)", color: "#34D399" }}
+                  style={{
+                    background: "rgba(5,150,105,0.15)",
+                    border: "1px solid rgba(5,150,105,0.3)",
+                    color: "#34D399",
+                  }}
                 >
                   <Building2 size={13} />
                   For Mosque Admins
@@ -794,8 +995,13 @@ export default function LandingPage() {
                   Put your mosque
                   <span style={{ color: "#34D399" }}> on the map</span>
                 </h2>
-                <p className="text-lg mb-8" style={{ color: "rgba(255,255,255,0.6)" }}>
-                  Help your community find you. Keep your timings accurate. Reach Muslims who are new to the area, traveling, or simply looking for the nearest mosque.
+                <p
+                  className="text-lg mb-8"
+                  style={{ color: "rgba(255,255,255,0.6)" }}
+                >
+                  Help your community find you. Keep your timings accurate.
+                  Reach Muslims who are new to the area, traveling, or simply
+                  looking for the nearest mosque.
                 </p>
 
                 <div className="flex flex-col gap-4 mb-10">
@@ -810,7 +1016,12 @@ export default function LandingPage() {
                       <div className="w-5 h-5 rounded-full bg-emerald-600 flex items-center justify-center flex-shrink-0">
                         <CheckCircle size={12} className="text-white" />
                       </div>
-                      <p className="text-sm" style={{ color: "rgba(255,255,255,0.75)" }}>{point}</p>
+                      <p
+                        className="text-sm"
+                        style={{ color: "rgba(255,255,255,0.75)" }}
+                      >
+                        {point}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -840,8 +1051,14 @@ export default function LandingPage() {
                       border: "1px solid rgba(255,255,255,0.15)",
                       color: "white",
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.14)"}
-                    onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.08)"}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.background =
+                        "rgba(255,255,255,0.14)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.background =
+                        "rgba(255,255,255,0.08)")
+                    }
                   >
                     Learn more
                   </a>
@@ -853,10 +1070,26 @@ export default function LandingPage() {
             <Reveal delay={200}>
               <div className="flex flex-col gap-4">
                 {[
-                  { icon: Clock, title: "Real-time updates", desc: "Change a timing and it reflects instantly for all users nearby." },
-                  { icon: Shield, title: "Verified badge", desc: "Mosque admin updates earn the Verified status — building trust with your community." },
-                  { icon: Users, title: "Multiple Jumu'ah slots", desc: "Run two or three Jumu'ah? List all slots with different languages and spaces." },
-                  { icon: Smartphone, title: "Manage from your phone", desc: "No laptop needed. Update timings from the Sabeel app in seconds." },
+                  {
+                    icon: Clock,
+                    title: "Real-time updates",
+                    desc: "Change a timing and it reflects instantly for all users nearby.",
+                  },
+                  {
+                    icon: Shield,
+                    title: "Verified badge",
+                    desc: "Mosque admin updates earn the Verified status — building trust with your community.",
+                  },
+                  {
+                    icon: Users,
+                    title: "Multiple Jumu'ah slots",
+                    desc: "Run two or three Jumu'ah? List all slots with different languages and spaces.",
+                  },
+                  {
+                    icon: Smartphone,
+                    title: "Manage from your phone",
+                    desc: "No laptop needed. Update timings from the Sabeel app in seconds.",
+                  },
                 ].map((item, i) => {
                   const Icon = item.icon;
                   return (
@@ -867,8 +1100,14 @@ export default function LandingPage() {
                         background: "rgba(255,255,255,0.05)",
                         border: "1px solid rgba(255,255,255,0.08)",
                       }}
-                      onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.09)"}
-                      onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.05)"}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.background =
+                          "rgba(255,255,255,0.09)")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.background =
+                          "rgba(255,255,255,0.05)")
+                      }
                     >
                       <div
                         className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
@@ -877,8 +1116,15 @@ export default function LandingPage() {
                         <Icon size={18} className="text-emerald-400" />
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-white mb-1">{item.title}</p>
-                        <p className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.5)" }}>{item.desc}</p>
+                        <p className="text-sm font-semibold text-white mb-1">
+                          {item.title}
+                        </p>
+                        <p
+                          className="text-xs leading-relaxed"
+                          style={{ color: "rgba(255,255,255,0.5)" }}
+                        >
+                          {item.desc}
+                        </p>
                       </div>
                     </div>
                   );
@@ -911,7 +1157,8 @@ export default function LandingPage() {
               <span style={{ color: "#059669" }}> congregation</span>
             </h2>
             <p className="text-lg text-gray-500 mb-10 max-w-xl mx-auto leading-relaxed">
-              Join thousands of Muslims finding their nearest mosque and never missing Jamā'ah again. Free forever.
+              Join thousands of Muslims finding their nearest mosque and never
+              missing Jamā'ah again. Free forever.
             </p>
 
             <div className="flex flex-wrap gap-4 justify-center mb-8">
@@ -922,8 +1169,12 @@ export default function LandingPage() {
                   background: "linear-gradient(135deg, #059669, #047857)",
                   boxShadow: "0 8px 32px rgba(5,150,105,0.3)",
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.transform = "translateY(-3px)"}
-                onMouseLeave={(e) => e.currentTarget.style.transform = "translateY(0)"}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "translateY(-3px)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "translateY(0)")
+                }
               >
                 <Smartphone size={22} />
                 <div className="text-left">
@@ -977,8 +1228,12 @@ export default function LandingPage() {
                 <Building2 size={16} className="text-white" />
               </div>
               <div>
-                <p className="text-white font-bold text-sm">{APP_CONFIG.name}</p>
-                <p className="text-xs" style={{ color: "#34D399" }}>{APP_CONFIG.nameArabic}</p>
+                <p className="text-white font-bold text-sm">
+                  {APP_CONFIG.name}
+                </p>
+                <p className="text-xs" style={{ color: "#34D399" }}>
+                  {APP_CONFIG.nameArabic}
+                </p>
               </div>
             </div>
 
@@ -988,14 +1243,19 @@ export default function LandingPage() {
                 { label: "Features", href: "#features" },
                 { label: "For Mosques", href: "#mosques" },
                 { label: "Download", href: "#download" },
+                { label: "Feedback", href: "/feedback" },
               ].map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
                   className="text-xs transition-colors"
                   style={{ color: "rgba(255,255,255,0.4)" }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = "rgba(255,255,255,0.8)"}
-                  onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,0.4)"}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.color = "rgba(255,255,255,0.8)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.color = "rgba(255,255,255,0.4)")
+                  }
                 >
                   {link.label}
                 </a>
@@ -1005,8 +1265,12 @@ export default function LandingPage() {
                 href="/login"
                 className="text-xs transition-colors"
                 style={{ color: "rgba(255,255,255,0.2)" }}
-                onMouseEnter={(e) => e.currentTarget.style.color = "rgba(255,255,255,0.5)"}
-                onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,0.2)"}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.color = "rgba(255,255,255,0.5)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color = "rgba(255,255,255,0.2)")
+                }
               >
                 Admin
               </Link>
@@ -1014,7 +1278,8 @@ export default function LandingPage() {
 
             {/* Copyright */}
             <p className="text-xs" style={{ color: "rgba(255,255,255,0.25)" }}>
-              © {new Date().getFullYear()} {APP_CONFIG.name}. All rights reserved.
+              © {new Date().getFullYear()} {APP_CONFIG.name}. All rights
+              reserved.
             </p>
           </div>
           {/* Legal links */}
@@ -1032,8 +1297,12 @@ export default function LandingPage() {
                 href={link.href}
                 className="text-xs transition-colors"
                 style={{ color: "rgba(255,255,255,0.35)" }}
-                onMouseEnter={(e) => e.currentTarget.style.color = "rgba(255,255,255,0.7)"}
-                onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,0.35)"}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.color = "rgba(255,255,255,0.7)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color = "rgba(255,255,255,0.35)")
+                }
               >
                 {link.label}
               </Link>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const SUPPORT_EMAIL = "support@mosquebuddy.app"; // TODO: replace with your real inbox
+import { APP_CONFIG } from "@/lib/constants";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL; // TODO: point at your existing API config if you already have one (e.g. src/lib/api.js)
 
 export default function DeleteAccountPage() {
@@ -39,7 +39,7 @@ export default function DeleteAccountPage() {
         associated data at any time.
       </p>
 
-      <Section title="Option 1 — In the app(Coming soon)">
+      <Section title="Option 1 — In the app (Recommended)">
         <p>Open MosqueBuddy → Profile → Account Settings → Delete Account.</p>
       </Section>
 
@@ -90,7 +90,7 @@ export default function DeleteAccountPage() {
             {status === "error" && (
               <p className="text-red-600 text-sm">
                 Something went wrong — please email{" "}
-                <a href={`mailto:${SUPPORT_EMAIL}`} className="underline">
+                <a href={`mailto:${APP_CONFIG.SUPPORT_EMAIL}`} className="underline">
                   {SUPPORT_EMAIL}
                 </a>{" "}
                 directly instead.

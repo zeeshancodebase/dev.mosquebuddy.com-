@@ -32,6 +32,7 @@ export const APP_CONFIG = {
   playStoreLink: "#",       // placeholder
   mosqueAdminLink: "/login", // mosque admins go to admin login
   version: "1.0.0",
+  SUPPORT_EMAIL:"support@mosquebuddy.app",
 };
 
 export const VERIFICATION_STATUS = {

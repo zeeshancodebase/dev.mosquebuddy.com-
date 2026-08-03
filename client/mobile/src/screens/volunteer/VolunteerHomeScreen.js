@@ -117,13 +117,13 @@ export default function VolunteerHomeScreen({ navigation }) {
         fetchVolunteerReports({ status: "pending", limit: 5 }),
         fetchVolunteerSuggestions({ status: "pending", limit: 5 }),
       ]);
-          console.log("RAW suggestions response:", JSON.stringify(suggRes, null, 2));
+          // console.log("RAW suggestions response:", JSON.stringify(suggRes, null, 2));
 
       setAssignmentList(assignRes.data || []);
-      console.log(
-        "Assignments:\n",
-        JSON.stringify(assignmentList, null, 2)
-      );
+      // console.log(
+      //   "Assignments:\n",
+      //   JSON.stringify(assignmentList, null, 2)
+      // );
 
       setVenues(venueRes.data || []);
       setReports(reportRes.data || []);

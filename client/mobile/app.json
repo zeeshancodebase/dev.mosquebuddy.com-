@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "MosqueBuddy",
-    "slug": "mosquebuddy",
-    "version": "1.0.0",
+    "slug": "mobile",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#F3F3EB"
     },
     "ios": {
       "supportsTablet": true
@@ -18,7 +18,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#F3F3EB"
       },
       "edgeToEdgeEnabled": true,
       "package": "com.mosquebuddy.app",

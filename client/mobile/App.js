@@ -7,9 +7,11 @@ import AppNavigator from "./src/navigation/AppNavigator";
 import { COLORS } from "./src/constants";
 import { LocationProvider } from "./src/context/LocationContext";
 import ActionFlowModal from "./src/components/ActionFlowModal";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 
 export default function App() {
   return (
+     <KeyboardProvider>
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <LocationProvider>
@@ -20,7 +22,7 @@ export default function App() {
           </AuthProvider>
         </LocationProvider>
       </SafeAreaProvider>
-    </GestureHandlerRootView>
+    </GestureHandlerRootView></KeyboardProvider>
   );
 }
 // npx expo start

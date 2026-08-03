@@ -37,6 +37,7 @@ import {
   LogOut,
   MapPinPlus,
   TriangleAlert,
+  UserCog
 } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../context/AuthContext";
@@ -428,6 +429,14 @@ ${APP_CONFIG.appStoreUrl}`,
             //   Alert.alert("Coming Soon", "Location settings coming soon.")
             // }
             />
+            {isLoggedIn && (
+              <MenuItem
+                icon={<UserCog size={20} color={COLORS.primary} />}
+                label="Account Settings"
+                sublabel="Manage your account"
+                onPress={() => navigation.navigate("AccountSettings")}
+              />
+            )}
           </Card>
 
           {/* ── About ── */}

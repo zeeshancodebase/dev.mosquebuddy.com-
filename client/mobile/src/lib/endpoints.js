@@ -162,3 +162,8 @@ export function fetchPublicCities(stateId) {
 export function fetchPublicAreas(cityId) {
   return api.get(`/public/locations/areas?cityId=${cityId}`);
 }
+
+// ── Auth (Self-Service Account Deletion) ──
+export function deleteMyAccount(password) {
+  return api.deleteWithBody("/auth/delete-account", { password });
+}

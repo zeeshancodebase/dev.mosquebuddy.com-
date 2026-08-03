@@ -35,6 +35,9 @@ import FeedbackScreen from "../screens/main/FeedbackScreen.js";
 
 import QiblaScreen from "../screens/main/QiblaScreen";
 
+import AccountSettingsScreen from "../screens/main/AccountSettingsScreen";
+import DeleteAccountScreen from "../screens/main/DeleteAccountScreen";
+
 const RootStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -177,6 +180,17 @@ export default function AppNavigator() {
         <RootStack.Screen
           name="Register"
           component={RegisterScreen}
+          options={{ animation: "slide_from_right" }}
+        />
+
+        <RootStack.Screen
+          name="AccountSettings"
+          component={AccountSettingsScreen}
+          options={{ animation: "slide_from_right" }}
+        />
+        <RootStack.Screen
+          name="DeleteAccount"
+          component={DeleteAccountScreen}
           options={{ animation: "slide_from_right" }}
         />
 
