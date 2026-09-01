@@ -437,6 +437,7 @@ function Navbar() {
 
 // ── Main page ─────────────────────────────────────────────
 export default function LandingPage() {
+  const [showMosqueRegister, setShowMosqueRegister] = useState(false);
   return (
     <div
       className="overflow-x-hidden"
@@ -1027,8 +1028,9 @@ export default function LandingPage() {
                 </div>
 
                 <div className="flex flex-wrap gap-3">
-                  <a
-                    href={APP_CONFIG.mosqueAdminLink}
+                  <button
+                    type="button"
+                    onClick={() => setShowMosqueRegister(true)}
                     className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white transition-all duration-200"
                     style={{ background: "#059669" }}
                     onMouseEnter={(e) => {
@@ -1042,7 +1044,7 @@ export default function LandingPage() {
                   >
                     Register your mosque
                     <ArrowRight size={16} />
-                  </a>
+                  </button>
                   <a
                     href="#"
                     className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200"
@@ -1214,6 +1216,68 @@ export default function LandingPage() {
           </Reveal>
         </div>
       </section>
+
+      {showMosqueRegister && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center px-4"
+          style={{ background: "rgba(0,0,0,0.65)" }}
+          onClick={() => setShowMosqueRegister(false)}
+        >
+          <div
+            className="w-full max-w-md rounded-3xl p-7 relative"
+            style={{
+              background: "white",
+              boxShadow: "0 24px 80px rgba(0,0,0,0.3)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setShowMosqueRegister(false)}
+              className="absolute top-4 right-4 p-2 rounded-full text-gray-400 hover:text-gray-700"
+            >
+              <X size={20} />
+            </button>
+
+            <div
+              className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5"
+              style={{ background: "#ECFDF5" }}
+            >
+              <Building2 size={23} style={{ color: "#059669" }} />
+            </div>
+
+            <h3 className="text-xl font-bold text-gray-900 mb-2">
+              Register your mosque
+            </h3>
+
+            <p className="text-sm text-gray-500 leading-relaxed mb-6">
+              Mosque registration and management is available through the app.
+              Install the app, create your account, and register your mosque
+              from there.
+            </p>
+
+            <a
+              href={APP_CONFIG.playStoreLink}
+              className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl text-sm font-semibold text-white mb-3"
+              style={{ background: "#059669" }}
+            >
+              <Smartphone size={18} />
+              Install the app
+            </a>
+
+            <p className="text-xs text-gray-400 text-center">
+              Need help?{" "}
+              <a
+                href={`mailto:${APP_CONFIG.SUPPORT_EMAIL}`}
+                className="text-emerald-600 font-medium hover:underline"
+              >
+                Contact our support team
+              </a>
+              .
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* ── FOOTER ─────────────────────────────────────── */}
       <footer

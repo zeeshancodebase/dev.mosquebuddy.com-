@@ -32,7 +32,8 @@ export const APP_CONFIG = {
   playStoreLink: "https://play.google.com/store/apps/details?id=com.mosquebuddy.app",      
   mosqueAdminLink: "/login", // mosque admins go to admin login
   version: "1.0.0",
-  SUPPORT_EMAIL:"support@mosquebuddy.app",
+  // SUPPORT_EMAIL:"support@mosquebuddy.app",
+  SUPPORT_EMAIL:"szaofficials@gmail.com",
 };
 
 export const VERIFICATION_STATUS = {
