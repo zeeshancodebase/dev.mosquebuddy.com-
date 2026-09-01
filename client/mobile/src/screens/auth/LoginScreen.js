@@ -218,7 +218,7 @@ export default function LoginScreen({ navigation }) {
           >
             <Text style={styles.formTitle}>Welcome back</Text>
             <Text style={styles.formSubtitle}>
-              Sign in to your Sabeel account
+              Sign in to your {APP_CONFIG.name} account
             </Text>
 
             {/* Identifier field */}

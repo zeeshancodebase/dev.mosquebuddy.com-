@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
-import { COLORS, VENUE_TYPES } from "../../constants";
+import { APP_CONFIG, COLORS, VENUE_TYPES } from "../../constants";
 import Loader from "../../components/Loader";
 import EmptyState from "../../components/EmptyState";
 import { fetchVolunteerSuggestions, updateVolunteerSuggestionStatus } from "../../lib/endpoints";
@@ -106,7 +106,7 @@ export default function VolunteerSuggestionsScreen({ navigation, route }) {
   async function handleDuplicate(suggestion) {
     const { confirmed, error } = await ActionFlow.confirm({
       title: "Mark as Duplicate",
-      message: "This mosque already exists in Sabeel?",
+      message: `This mosque already exists in ${APP_CONFIG.name}?`,
       confirmText: "Mark Duplicate",
       loadingMessage: "Updating...",
       successTitle: "Marked",

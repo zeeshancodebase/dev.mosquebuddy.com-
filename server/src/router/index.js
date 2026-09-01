@@ -28,6 +28,7 @@ import adminVenueSuggestionRoutes from "./adminVenueSuggestion.routes.js";
 import volunteerAssignmentRoutes from "./volunteerAssignment.routes.js";
 import updateHistoryRoutes from "./updateHistory.routes.js";
 
+import announcementRoutes from "./announcement.routes.js";
 
 import mosqueAdminRoutes from "./mosqueAdmin.routes.js";
 
@@ -35,6 +36,10 @@ import volunteerRoutes from "./volunteer.routes.js";
 
 import deviceTokenRoutes from "./deviceToken.routes.js";
 import notificationPreferenceRoutes from "./notificationPreference.routes.js";
+
+import featureInterestRoutes from './featureInterest.routes.js';
+
+import mapsLinkRoutes from "./mapsLink.routes.js";
 
 
 
@@ -60,6 +65,7 @@ router.use("/", feedbackRoutes);
 // router.use("/reports", reportRoutes);
 // router.use("/suggestions", suggestionRoutes);
 router.use("/locations", locationRoutes);
+router.use("/utils", mapsLinkRoutes);
 
 
 router.use("/admin", adminActivityLogRoutes);
@@ -80,9 +86,13 @@ router.use("/device-tokens", deviceTokenRoutes);
 router.use("/notification-preferences", notificationPreferenceRoutes);
 
 
+router.use('/', featureInterestRoutes);
+router.use("/", announcementRoutes);
+
 // Broad protected timing routes must come LAST because they are mounted at "/"
 router.use("/", dailyPrayerTimingRoutes);
 router.use("/", jumuahTimingRoutes);
+
 
 
 export default router;

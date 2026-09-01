@@ -12,7 +12,7 @@ import Animated, {
   withSequence,
   Easing,
 } from "react-native-reanimated";
-import { COLORS } from "../../constants";
+import { APP_CONFIG, COLORS } from "../../constants";
 import EmptyState from "../../components/EmptyState";
 import { getUserLocation } from "../../lib/location";
 import {
@@ -24,6 +24,8 @@ import {
   angleDiff,
   smoothAngle,
 } from "../../lib/qiblaUtils";
+import { MapPin } from "lucide-react-native";
+import { useLocation } from "../../context/LocationContext";
 
 const ACCURACY_META = {
   high: { label: "High accuracy", color: "#10B981" },
@@ -40,6 +42,7 @@ const MARKER_RADIUS = DIAL_RADIUS - 34; // how far out the Kaaba marker sits
 const TICK_RADIUS = DIAL_RADIUS - 14;
 
 export default function QiblaScreen({ navigation }) {
+  const { locationLabel } = useLocation();
   const [permissionState, setPermissionState] = useState("checking"); // checking | denied | ready
   const [coords, setCoords] = useState(null); // { latitude, longitude }
   const [qiblaBearing, setQiblaBearing] = useState(null);
@@ -121,7 +124,7 @@ export default function QiblaScreen({ navigation }) {
     setAligned(isAligned);
 
     if (isAligned && !wasAlignedRef.current) {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => { });
       glow.value = withRepeat(withSequence(withTiming(1, { duration: 700 }), withTiming(0.4, { duration: 700 })), -1, true);
     } else if (!isAligned && wasAlignedRef.current) {
       glow.value = withTiming(0, { duration: 250 });
@@ -165,7 +168,7 @@ export default function QiblaScreen({ navigation }) {
         <EmptyState
           icon="📍"
           title="Location needed"
-          subtitle="Sabeel needs your location to calculate the Qibla direction accurately. Please enable location access and try again."
+          subtitle={`${APP_CONFIG.name} needs your location to calculate the Qibla direction accurately. Please enable location access and try again.`}
           actionLabel="Try Again"
           onAction={loadLocation}
         />
@@ -285,12 +288,17 @@ export default function QiblaScreen({ navigation }) {
         {/* ── Bottom detail cards: location + compass accuracy ── */}
         <View style={styles.bottomGroup}>
           <View style={styles.detailRow}>
-            <Text style={styles.detailIcon}>📍</Text>
+            <MapPin size={16} color="rgba(255,255,255,0.6)" style={styles.detailIcon} />
             <View style={styles.detailTextWrap}>
               <Text style={styles.detailLabel}>Your location</Text>
               <Text style={styles.detailValue}>
-                {coords ? formatCoordinates(coords.latitude, coords.longitude) : "—"}
+                {locationLabel || (coords ? formatCoordinates(coords.latitude, coords.longitude) : "—")}
               </Text>
+              {locationLabel && coords && (
+                <Text style={styles.detailCaption}>
+                  {formatCoordinates(coords.latitude, coords.longitude)}
+                </Text>
+              )}
             </View>
           </View>
 
@@ -518,7 +526,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
   },
-  detailIcon: { fontSize: 16, width: 16, textAlign: "center" },
+  detailIcon: { width: 16, marginTop: 1 },
   accuracyDot: {
     width: 10,
     height: 10,
@@ -534,6 +542,11 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 14,
     fontWeight: "700",
+    marginTop: 1,
+  },
+  detailCaption: {
+    color: "rgba(255,255,255,0.3)",
+    fontSize: 10,
     marginTop: 1,
   },
   calibrateBanner: {

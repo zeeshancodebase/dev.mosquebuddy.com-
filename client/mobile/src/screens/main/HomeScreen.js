@@ -24,7 +24,7 @@ import Animated, {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../../context/AuthContext";
-import { COLORS, APP_CONFIG, PRAYER_NAMES } from "../../constants";
+import { COLORS, APP_CONFIG, PRAYER_NAMES, FEATURE_KEYS } from "../../constants";
 import EmptyState from "../../components/EmptyState";
 import IslamicPattern from "../../components/IslamicPattern";
 import { fetchNextJamaah } from "../../lib/endpoints";
@@ -39,7 +39,10 @@ import { useLocation } from "../../context/LocationContext";
 import { MapPin, MapPinned } from "lucide-react-native";
 import LongPressHint from "../../components/LongPressHint";
 import AnnouncementsSection from "../../components/AnnouncementsSection";
-
+import ActionTile from "../../components/ActionTile";
+import TasbeehActionTile from "../../components/TasbeehActionTile";
+import TasbeehHomeCard from "../../components/TasbeehHomeCard";
+import ComingSoonModal from "../../components/ComingSoonModal";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const PRAYER_ARABIC = {
@@ -174,24 +177,6 @@ function JamaahCard({ venue, index, onPress }) {
   );
 }
 
-// ─── Quick action tile ─────────────────────────────────────────
-function ActionTile({ icon, title, subtitle, onPress, accent, ...rest },
-  ref) {
-  return (
-    <TouchableOpacity
-      style={styles.actionTile}
-      onPress={onPress}
-      activeOpacity={0.82}
-      {...rest}
-    >
-      <View style={[styles.actionTileIcon, { backgroundColor: accent + "18" }]}>
-        <Text style={styles.actionTileIconText}>{icon}</Text>
-      </View>
-      <Text style={styles.actionTileTitle}>{title}</Text>
-      <Text style={styles.actionTileSubtitle}>{subtitle}</Text>
-    </TouchableOpacity>
-  );
-}
 
 function getLiveCountdown(targetTime, dayLabel = "today") {
   if (!targetTime) return null;
@@ -281,6 +266,9 @@ export default function HomeScreen({ navigation }) {
   const [targetPrayerName, setTargetPrayerName] = useState(null);
   const [dayLabel, setDayLabel] = useState("today");
   const [errorMessage, setErrorMessage] = useState(null);
+
+  const [halalModalVisible, setHalalModalVisible] = useState(false);
+
 
 
   const isFriday = isTodayFriday();
@@ -451,6 +439,21 @@ export default function HomeScreen({ navigation }) {
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Assalāmu alaykum" : hour < 17 ? "Assalāmu alaykum" : "Assalāmu alaykum";
 
+
+  const announcementVenueIds = venues.map((v) => v.id).filter(Boolean);
+  const announcementAreaId =
+    venues[0]?.area?.id ||
+    (locationContext?.type === "manual" ? locationContext.areaId : null) ||
+    null;
+  const announcementCityId =
+    venues[0]?.city?.id ||
+    (locationContext?.type === "manual" ? locationContext.cityId : null) ||
+    null;
+  const announcementStateId =
+    venues[0]?.state?.id ||
+    (locationContext?.type === "manual" ? locationContext.stateId : null) ||
+    null;
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.dark} />
@@ -474,9 +477,11 @@ export default function HomeScreen({ navigation }) {
                 {APP_CONFIG.name}{"\n"}
                 <Text style={styles.appBrandArabic}>  {APP_CONFIG.nameArabic}</Text>
               </Text> */}
-                <Text style={styles.appBrand}>
+              <Text style={styles.appBrand}>
                 {APP_CONFIG.name}
-                <Text style={styles.appBrandArabic}> </Text>
+                <Text style={styles.appBrandArabic}>
+                  {/* {APP_CONFIG.nameArabic}  */}
+                </Text>
               </Text>
             </View>
 
@@ -735,12 +740,22 @@ export default function HomeScreen({ navigation }) {
               ))}
             </>)
           )}
-          
+
+          {isFriday && (<>
+            {/* ── Divider ── */}
+            <View style={styles.divider} />
+            <TasbeehHomeCard navigation={navigation} /></>)}
+
           {/* ── Divider ── */}
           <View style={styles.divider} />
 
-          {/* ── Announcements — mosque/area/city/state, mock data for now ── */}
-          <AnnouncementsSection />
+          {/* ── Announcements ── */}
+          <AnnouncementsSection
+            venueIds={announcementVenueIds}
+            areaId={announcementAreaId}
+            cityId={announcementCityId}
+            stateId={announcementStateId}
+          />
 
           {/* ── Divider ── */}
           <View style={styles.divider} />
@@ -748,35 +763,33 @@ export default function HomeScreen({ navigation }) {
           {/* ── Quick actions ── */}
           <Text style={styles.actionsLabel}>QUICK ACTIONS</Text>
           <View style={styles.actionsRow}>
-            {/* <ActionTile
-              icon="🕌"
-              title="Jumu'ah"
-              subtitle="Find Friday slots"
-              accent="#D4A843"
-              onPress={() => navigation.navigate("Jumuah")}
-            /> */}
             <ActionTile
-              icon="🔍"
-              title="Search"
-              subtitle="By name or area"
-              accent={COLORS.primary}
-              onPress={() => navigation.navigate("Search")}
+              icon="🍽️"
+              title="Halal Food Finder"
+              subtitle="Coming soon"
+              accent="#EA580C"
+              badge="Soon"
+              onPress={() => setHalalModalVisible(true)}
             />
-            <ActionTile
-              icon="➕"
-              title="Add Mosque"
-              subtitle="Missing from Sabeel?"
-              accent="#8B5CF6"
-              onPress={() => navigation.navigate("SuggestMosque")}
-            />
+            {/* <ActionTile icon="🕌" title="Jumu'ah" subtitle="Find Friday slots" accent="#D4A843"
+              onPress={() => navigation.navigate("Jumuah")} /> */}
+            <ActionTile icon="🔍" title="Search" subtitle="By name or area" accent={COLORS.primary}
+              onPress={() => navigation.navigate("Search")} />
+            <ActionTile icon="➕" title="Add Mosque" subtitle={`Missing from ${APP_CONFIG.name}?`} accent="#8B5CF6"
+              onPress={() => navigation.navigate("SuggestMosque")} />
             <LongPressHint text="Find the direction to pray toward">
-              <ActionTile
-                icon="🧭"
-                title="Qibla"
-                subtitle="Find direction"
-                accent="#059669"
-                onPress={() => navigation.navigate("Qibla")}
-              /></LongPressHint>
+              <ActionTile icon="🧭" title="Qibla" subtitle="Find direction" accent="#059669"
+                onPress={() => navigation.navigate("Qibla")} />
+            </LongPressHint>
+            <TasbeehActionTile navigation={navigation} />
+
+            <ComingSoonModal
+              visible={halalModalVisible}
+              onClose={() => setHalalModalVisible(false)}
+              featureKey={FEATURE_KEYS.HALAL_RESTAURANT_FINDER}
+              title="Halal Restaurant Finder"
+              description="Find verified halal restaurants near you, the same way you find verified mosque timings."
+            />
           </View>
 
           {/* ── Friday Jumu'ah banner — always visible, elevated on Fridays ── */}
@@ -1148,7 +1161,7 @@ const styles = StyleSheet.create({
   divider: {
     height: 1,
     backgroundColor: COLORS.borderLight,
-    marginVertical: 24,
+    marginVertical: 20,
   },
 
   // ── Quick actions ──
@@ -1161,42 +1174,9 @@ const styles = StyleSheet.create({
   },
   actionsRow: {
     flexDirection: "row",
+    flexWrap: "wrap",
     gap: 10,
     marginBottom: 20,
-  },
-  actionTile: {
-    flex: 1,
-    backgroundColor: COLORS.card,
-    borderRadius: 16,
-    padding: 14,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
-    alignItems: "flex-start",
-    elevation: 1,
-    shadowColor: COLORS.dark,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-  },
-  actionTileIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 10,
-  },
-  actionTileIconText: { fontSize: 20 },
-  actionTileTitle: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: COLORS.textPrimary,
-    marginBottom: 3,
-  },
-  actionTileSubtitle: {
-    fontSize: 11,
-    color: COLORS.textMuted,
-    lineHeight: 15,
   },
 
   // ── Jumu'ah banner ──

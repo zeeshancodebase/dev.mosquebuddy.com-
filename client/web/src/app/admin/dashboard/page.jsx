@@ -76,6 +76,15 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
+  const [featureInterest, setFeatureInterest] = useState([]);
+
+  useEffect(() => {
+    api
+      .get("/admin/feature-interest/summary")
+      .then((res) => setFeatureInterest(res.data ?? []))
+      .catch(() => setFeatureInterest([]));
+  }, []);
+
   useEffect(() => {
     async function fetchDashboard() {
       setLoading(true);
@@ -98,13 +107,13 @@ export default function DashboardPage() {
 
   const timingHealth = data?.timingHealth || {};
 
-const timingIssues =
-  (timingHealth.dailyTimingsNeedsUpdate || 0) +
-  (timingHealth.jumuahTimingsNeedsUpdate || 0);
+  const timingIssues =
+    (timingHealth.dailyTimingsNeedsUpdate || 0) +
+    (timingHealth.jumuahTimingsNeedsUpdate || 0);
 
-const incompleteVenues =
-  (timingHealth.venuesWithoutDailyTimings || 0) +
-  (timingHealth.venuesWithoutJumuahTimings || 0);
+  const incompleteVenues =
+    (timingHealth.venuesWithoutDailyTimings || 0) +
+    (timingHealth.venuesWithoutJumuahTimings || 0);
 
   return (
     <div>
@@ -125,30 +134,55 @@ const incompleteVenues =
           loading={loading}
         />
         <StatCard
-  title="Pending Suggestions"
-  value={loading ? null : (stats.pendingSuggestions ?? "—")}
-  subtitle="New venue submissions"
-  icon={Building2}
-  iconColor="blue"
-  loading={loading}
-/>
+          title="Pending Suggestions"
+          value={loading ? null : (stats.pendingSuggestions ?? "—")}
+          subtitle="New venue submissions"
+          icon={Building2}
+          iconColor="blue"
+          loading={loading}
+        />
         <StatCard
-    title="Timing Issues"
-    value={loading ? null : timingIssues}
-    subtitle="Daily & Jumu'ah records"
-    icon={Clock}
-    iconColor="red"
-    loading={loading}
-  />
-         <StatCard
-    title="Incomplete Venues"
-    value={loading ? null : incompleteVenues}
-    subtitle="Missing daily or Jumu'ah timings"
-    icon={MapPin}
-    iconColor="emerald"
-    loading={loading}
-  />
+          title="Timing Issues"
+          value={loading ? null : timingIssues}
+          subtitle="Daily & Jumu'ah records"
+          icon={Clock}
+          iconColor="red"
+          loading={loading}
+        />
+        <StatCard
+          title="Incomplete Venues"
+          value={loading ? null : incompleteVenues}
+          subtitle="Missing daily or Jumu'ah timings"
+          icon={MapPin}
+          iconColor="emerald"
+          loading={loading}
+        />
       </div>
+      <Card>
+        <CardHeader
+          title="Feature Interest"
+          subtitle="Signals from coming-soon polls"
+        />
+        {featureInterest.length === 0 ? (
+          <p className="text-sm text-gray-400">No signals yet</p>
+        ) : (
+          <div className="flex flex-col gap-3">
+            {featureInterest.map((f) => (
+              <div
+                key={f.featureKey}
+                className="flex items-center justify-between"
+              >
+                <span className="text-sm text-gray-600 capitalize">
+                  {f.featureKey.replace(/_/g, " ")}
+                </span>
+                <span className="text-sm font-semibold text-emerald-700">
+                  {f.count}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
 
       {/* ── Bottom row ──────────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -245,9 +279,9 @@ const incompleteVenues =
           {/* Venue Verification */}
           <Card>
             <CardHeader
-  title="Venue Verification"
-  subtitle="Verification status of venues"
-/>
+              title="Venue Verification"
+              subtitle="Verification status of venues"
+            />
             <div className="flex flex-col gap-3">
               {VERIFICATION_STATUSES.map((item) => (
                 <div
@@ -278,73 +312,67 @@ const incompleteVenues =
             </div>
           </Card>
 
-<Card>
-  <CardHeader
-    title="Timing Freshness"
-    subtitle="Records requiring verification"
-  />
+          <Card>
+            <CardHeader
+              title="Timing Freshness"
+              subtitle="Records requiring verification"
+            />
 
-  <div className="flex flex-col gap-3">
-    <div className="flex items-center justify-between">
-      <span className="text-sm text-gray-600">
-        Daily timings stale
-      </span>
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">
+                  Daily timings stale
+                </span>
 
-      <span className="text-sm font-semibold">
-        {loading
-          ? "—"
-          : (data?.timingHealth?.staleDailyTimings ?? 0)}
-      </span>
-    </div>
+                <span className="text-sm font-semibold">
+                  {loading ? "—" : (data?.timingHealth?.staleDailyTimings ?? 0)}
+                </span>
+              </div>
 
-    <div className="flex items-center justify-between">
-      <span className="text-sm text-gray-600">
-        Jumu'ah timings stale
-      </span>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">
+                  Jumu'ah timings stale
+                </span>
 
-      <span className="text-sm font-semibold">
-        {loading
-          ? "—"
-          : (data?.timingHealth?.staleJumuahTimings ?? 0)}
-      </span>
-    </div>
-  </div>
-</Card>
+                <span className="text-sm font-semibold">
+                  {loading
+                    ? "—"
+                    : (data?.timingHealth?.staleJumuahTimings ?? 0)}
+                </span>
+              </div>
+            </div>
+          </Card>
 
-<Card>
-  <CardHeader
-    title="Data Completeness"
-    subtitle="Venues missing critical information"
-  />
+          <Card>
+            <CardHeader
+              title="Data Completeness"
+              subtitle="Venues missing critical information"
+            />
 
-  <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">No Daily Timings</span>
 
-    <div className="flex items-center justify-between">
-      <span className="text-sm text-gray-600">
-        No Daily Timings
-      </span>
+                <span className="text-sm font-semibold">
+                  {loading
+                    ? "—"
+                    : (data?.timingHealth?.venuesWithoutDailyTimings ?? 0)}
+                </span>
+              </div>
 
-      <span className="text-sm font-semibold">
-        {loading
-          ? "—"
-          : (data?.timingHealth?.venuesWithoutDailyTimings ?? 0)}
-      </span>
-    </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">
+                  No Jumu'ah Timings
+                </span>
 
-    <div className="flex items-center justify-between">
-      <span className="text-sm text-gray-600">
-        No Jumu'ah Timings
-      </span>
-
-      <span className="text-sm font-semibold">
-        {loading
-          ? "—"
-          : (data?.timingHealth?.venuesWithoutJumuahTimings ?? 0)}
-      </span>
-    </div>
-
-  </div>
-</Card>
+                <span className="text-sm font-semibold">
+                  {loading
+                    ? "—"
+                    : (data?.timingHealth?.venuesWithoutJumuahTimings ?? 0)}
+                </span>
+              </div>
+            </div>
+          </Card>
 
           {/* Quick actions */}
           <Card>

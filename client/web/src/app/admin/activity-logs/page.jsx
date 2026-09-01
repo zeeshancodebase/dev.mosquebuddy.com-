@@ -16,6 +16,7 @@ import Button from "@/components/ui/Button";
 import { PageLoader } from "@/components/ui/Spinner";
 import EmptyState from "@/components/ui/EmptyState";
 import DateRangePicker from "@/components/ui/DateRangePicker";
+import { APP_CONFIG } from "@/lib/constants";
 
 // ── Action → display config ────────────────────────────────
 const ACTION_CONFIG = {
@@ -128,7 +129,7 @@ export default function ActivityLogsPage() {
     <div>
       <PageHeader
         title="Activity Logs"
-        subtitle="Full audit trail of every action taken across Sabeel"
+        subtitle={`Full audit trail of every action taken across ${APP_CONFIG.name}`}
         breadcrumbs={[{ label: "Administration" }, { label: "Activity Logs" }]}
       />
 
@@ -199,7 +200,7 @@ export default function ActivityLogsPage() {
             description={
               hasActiveFilters
                 ? "Try adjusting your filters to see more results."
-                : "Actions taken across Sabeel will appear here as they happen."
+                : `Actions taken across ${APP_CONFIG.name} will appear here as they happen.`
             }
             action={hasActiveFilters ? handleResetFilters : undefined}
             actionLabel={hasActiveFilters ? "Reset filters" : undefined}

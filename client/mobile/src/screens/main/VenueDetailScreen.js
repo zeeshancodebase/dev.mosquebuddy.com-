@@ -34,6 +34,7 @@ import { getNextUpcomingPrayerName } from "../../lib/prayerTime";
 import { useAuth } from "../../context/AuthContext";
 import { Navigation, Phone, TriangleAlert } from "lucide-react-native";
 import ExpandingFAB from "../../components/ExpandingFAB";
+import AnnouncementsSection from "../../components/AnnouncementsSection";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -449,6 +450,10 @@ export default function VenueDetailScreen({ navigation, route }) {
               )}
             </>
           )}
+
+          {/* Announcements — venue-scoped only */}
+          <AnnouncementsSection venueId={venue.id} hideIfEmpty  />
+          <View style={{ height: 12 }} />
 
           {/* Facilities */}
           <SectionCard title="FACILITIES">

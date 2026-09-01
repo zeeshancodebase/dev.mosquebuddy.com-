@@ -166,6 +166,9 @@ model User {
   notificationPreference NotificationPreference?
 
   feedbacks Feedback[]
+  featureInterests FeatureInterest[]
+
+  announcements Announcement[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -238,6 +241,8 @@ model State {
   cities  City[]
   venues  Venue[]
 
+  announcements Announcement[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -259,6 +264,8 @@ model City {
   volunteerAssignments VolunteerAssignment[]
   venueSuggestions VenueSuggestion[]
 
+  announcements Announcement[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -277,6 +284,8 @@ model Area {
 
   volunteerAssignments VolunteerAssignment[]
   venueSuggestions VenueSuggestion[]
+
+  announcements Announcement[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -346,6 +355,8 @@ model Venue {
 
   updateHistories   UpdateHistory[]
   adminActivityLogs AdminActivityLog[]
+
+  announcements Announcement[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -855,4 +866,72 @@ model Feedback {
   @@index([submittedById])
   @@index([createdAt])
   @@map("feedback")
+}
+
+
+enum AnnouncementScope {
+  venue
+  area
+  city
+  state
+}
+
+enum AnnouncementCategory {
+  event
+  eid
+  urgent
+  class
+  general
+}
+
+model Announcement {
+  id            String                @id @default(uuid())
+
+  scope         AnnouncementScope
+  category      AnnouncementCategory  @default(general)
+
+  venueId       String?
+  venue         Venue?                @relation(fields: [venueId], references: [id])
+
+  areaId        String?
+  area          Area?                 @relation(fields: [areaId], references: [id])
+
+  cityId        String?
+  city          City?                 @relation(fields: [cityId], references: [id])
+
+  stateId       String?
+  state         State?                @relation(fields: [stateId], references: [id])
+
+  title         String
+  body          String
+
+  eventDate     DateTime?
+  eventTimeText String?
+
+  isPinned      Boolean               @default(false)
+  isActive      Boolean               @default(true)
+  expiresAt     DateTime?
+
+  createdById   String
+  createdBy     User                  @relation(fields: [createdById], references: [id])
+  createdByRole String?
+
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  @@map("announcements")
+}
+
+
+
+
+model FeatureInterest {
+  id         String   @id @default(uuid())
+  featureKey String
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
+
+  @@unique([featureKey, userId])
+  @@map("feature_interest")
 }

@@ -16,6 +16,7 @@ import { notify } from "@/lib/toast";
 import Link from "next/link";
 import Toggle from "@/components/ui/Toggle";
 import SearchableSelect from "@/components/ui/SearchableSelect";
+import LocationPicker from "@/components/ui/LocationPicker";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -695,8 +696,8 @@ export default function NewVenuePage() {
                   hint="Optional"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <Input
+              {/* <div className="grid grid-cols-2 gap-3">
+                 <Input
                   label="Latitude"
                   name="latitude"
                   placeholder="e.g. 12.9165"
@@ -709,8 +710,13 @@ export default function NewVenuePage() {
                   placeholder="e.g. 77.6101"
                   value={venue.longitude}
                   onChange={handleVenueChange}
-                />
-              </div>
+                />  </div>*/}
+              <LocationPicker
+                latitude={venue.latitude}
+                longitude={venue.longitude}
+                onChange={(updates) => setVenue((p) => ({ ...p, ...updates }))}
+              />
+
               <Input
                 label="Google Maps Link"
                 name="googleMapsLink"

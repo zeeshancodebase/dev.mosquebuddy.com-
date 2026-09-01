@@ -19,6 +19,7 @@ import Modal from "@/components/ui/Modal";
 import EmptyState from "@/components/ui/EmptyState";
 import StatCard from "@/components/shared/StatCard";
 import { PageLoader } from "@/components/ui/Spinner";
+import { APP_CONFIG } from "@/lib/constants";
 
 // ── Type → display config ──────────────────────────────────
 const TYPE_CONFIG = {
@@ -201,7 +202,7 @@ export default function FeedbackPage() {
     <div>
       <PageHeader
         title="Feedback"
-        subtitle="What users are telling us about Sabeel"
+        subtitle={`What users are telling us about ${APP_CONFIG.name}`}
         breadcrumbs={[{ label: "Community" }, { label: "Feedback" }]}
       />
 
@@ -580,7 +581,7 @@ export default function FeedbackPage() {
 //   {
 //     id: "fb_4",
 //     type: "feature_request",
-//     message: "Would be amazing if Sabeel could send a notification 10 minutes before Jamā'ah for my saved mosque. That's the one feature I'm waiting for.",
+//     message: "Would be amazing if {APP_CONFIG.name} could send a notification 10 minutes before Jamā'ah for my saved mosque. That's the one feature I'm waiting for.",
 //     rating: null,
 //     submittedBy: { id: "u3", name: "Zubair Ahmed", email: "zubair.a@outlook.com" },
 //     status: "resolved",
@@ -749,7 +750,7 @@ export default function FeedbackPage() {
 //     <div>
 //       <PageHeader
 //         title="Feedback"
-//         subtitle="What users are telling us about Sabeel"
+//         subtitle="What users are telling us about {APP_CONFIG.name}"
 //         breadcrumbs={[{ label: "Community" }, { label: "Feedback" }]}
 //       />
 

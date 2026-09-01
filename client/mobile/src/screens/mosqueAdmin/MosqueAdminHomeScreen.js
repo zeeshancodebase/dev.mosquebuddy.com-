@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
-import { COLORS, PRAYER_NAMES, VENUE_TYPES } from "../../constants";
+import { APP_CONFIG, COLORS, PRAYER_NAMES, VENUE_TYPES } from "../../constants";
 import IslamicPattern from "../../components/IslamicPattern";
 import Loader from "../../components/Loader";
 import EmptyState from "../../components/EmptyState";
@@ -171,7 +171,7 @@ export default function MosqueAdminHomeScreen({ navigation, route }) {
       ) : error ? (
         <EmptyState icon="⚠️" title="Couldn't load" subtitle={error} actionLabel="Retry" onAction={loadVenues} />
       ) : venues.length === 0 ? (
-        <EmptyState icon="🕌" title="No mosque assigned" subtitle="Contact your Sabeel admin to get assigned to a mosque." />
+        <EmptyState icon="🕌" title="No mosque assigned" subtitle={`Contact your ${APP_CONFIG.name} admin to get assigned to a mosque.`} />
       ) : (
         <ScrollView
           contentContainerStyle={styles.scrollContent}

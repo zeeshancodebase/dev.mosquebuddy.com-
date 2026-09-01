@@ -1,9 +1,8 @@
 // src/components/TabIcon.js
-import React from "react";
-import Svg, { Path, Circle, Rect, Line } from "react-native-svg";
+import Svg, { Path, Circle } from "react-native-svg";
 
 // Each icon is a 24×24 SVG. Stroke-based, consistent 1.8px stroke width,
-// rounded caps — feels modern and clean, matches the Sabeel design register.
+// rounded caps — feels modern and clean, matches the App design register.
 
 function HomeIcon({ color, size }) {
   return (

@@ -8,6 +8,7 @@ import {
   Alert,
   Dimensions,
   Share,
+  Linking,
 } from "react-native";
 import Animated, {
   useSharedValue,
@@ -37,7 +38,8 @@ import {
   LogOut,
   MapPinPlus,
   TriangleAlert,
-  UserCog
+  UserCog,
+  Megaphone
 } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../context/AuthContext";
@@ -46,6 +48,8 @@ import IslamicPattern from "../../components/IslamicPattern";
 import Card from "../../components/Card";
 import LocationBottomSheet from "../../components/LocationBottomSheet";
 import { useLocation } from "../../context/LocationContext";
+import * as StoreReview from "expo-store-review";
+import * as Application from "expo-application";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -175,11 +179,28 @@ export default function ProfileScreen({ navigation }) {
         title: APP_CONFIG.name,
         message: `I've been using ${APP_CONFIG.name} to find nearby mosques and prayer timings.
 
-${APP_CONFIG.appStoreUrl}`,
-        url: APP_CONFIG.appStoreUrl,
+        ${APP_CONFIG.playStoreLink}`,
+        url: APP_CONFIG.playStoreLink,
       });
     } catch (error) {
       console.log("Share cancelled or failed:", error);
+    }
+  }
+
+
+  async function handleRateApp() {
+    try {
+      const supported = await Linking.canOpenURL(APP_CONFIG.appReviewUrl);
+      if (supported) {
+        await Linking.openURL(APP_CONFIG.appReviewUrl);
+      } else {
+        await Share.share({
+          message: APP_CONFIG.appReviewUrl,
+          url: APP_CONFIG.appReviewUrl,
+        });
+      }
+    } catch (error) {
+      console.log("Rate app failed:", error);
     }
   }
 
@@ -296,6 +317,12 @@ ${APP_CONFIG.appStoreUrl}`,
                   sublabel="Reports submitted for your mosque"
                   onPress={() => navigation.navigate("MosqueAdminReports")}
                 />
+                <MenuItem
+                  icon={<Megaphone size={20} color={COLORS.primary} />}
+                  label="Post Announcement"
+                  sublabel="Share updates with your community"
+                  onPress={() => navigation.navigate("PostAnnouncement")}
+                />
               </Card>
             </>
           )}
@@ -320,6 +347,12 @@ ${APP_CONFIG.appStoreUrl}`,
                   onPress={() =>
                     Alert.alert("Coming Soon", "Coming soon.")
                   }
+                />
+                <MenuItem
+                  icon={<Megaphone size={20} color={COLORS.primary} />}
+                  label="Post Announcement"
+                  sublabel="Share updates for your assigned area"
+                  onPress={() => navigation.navigate("PostAnnouncement")}
                 />
               </Card>
             </>
@@ -348,6 +381,12 @@ ${APP_CONFIG.appStoreUrl}`,
                     Alert.alert("Coming Soon", "Coming soon.")
                   }
                 />
+                <MenuItem
+                  icon={<Megaphone size={20} color={COLORS.primary} />}
+                  label="Post Announcement"
+                  sublabel="Post at any scope — venue to nationwide"
+                  onPress={() => navigation.navigate("PostAnnouncement")}
+                />
               </Card>
             </>
           )}
@@ -359,7 +398,7 @@ ${APP_CONFIG.appStoreUrl}`,
               <Card padded={false}>
                 <MenuItem
                   // icon="🚩"
-                 icon={<TriangleAlert size={20} color={COLORS.primary} />} 
+                  icon={<TriangleAlert size={20} color={COLORS.primary} />}
                   label="Report Wrong Timing"
                   sublabel="Help keep timings accurate"
                   // onPress={() => navigation.navigate("ReportTiming")}
@@ -442,10 +481,10 @@ ${APP_CONFIG.appStoreUrl}`,
           {/* ── About ── */}
           <SectionHeader title="ABOUT" />
           <Card padded={false}>
-            <MenuItem
+            {/* <MenuItem
               // icon="ℹ️"
               icon={<Info size={20} color={COLORS.primary} />}
-              label="About Sabeel"
+              label={`About ${APP_CONFIG.name}`}
               sublabel="Version 1.0.0"
               onPress={() =>
                 Alert.alert(
@@ -453,14 +492,30 @@ ${APP_CONFIG.appStoreUrl}`,
                   `${APP_CONFIG.nameArabic}\n\n${APP_CONFIG.tagline}\n\nVersion 1.0.0`
                 )
               }
-            />
+            /> */}
             <MenuItem
+              icon={<Info size={20} color={COLORS.primary} />}
+              label={`About ${APP_CONFIG.name}`}
+              sublabel={`Version ${Application.nativeApplicationVersion}`}
+              onPress={() =>
+                Alert.alert(
+                  APP_CONFIG.name,
+                  `${APP_CONFIG.nameArabic}\n\n${APP_CONFIG.tagline}\n\nVersion ${Application.nativeApplicationVersion}`
+                )
+              }
+            />
+            {/* <MenuItem
               // icon="⭐"
               icon={<Star size={20} color={COLORS.primary} />}
               label="Rate the App"
               onPress={() =>
                 Alert.alert("Coming Soon", "Play Store link coming soon.")
               }
+            /> */}
+            <MenuItem
+              icon={<Star size={20} color={COLORS.primary} />}
+              label="Rate the App"
+              onPress={handleRateApp}
             />
             <MenuItem
               // icon="💬"

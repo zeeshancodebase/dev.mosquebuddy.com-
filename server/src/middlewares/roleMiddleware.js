@@ -11,24 +11,24 @@ import createHttpError from "../utils/createHttpError.js";
 
 
 export const roleMiddleware = (...allowedRoles) => {
-  return (req, res, next) => {
-    if (!req.user) {
-      return next(createHttpError(401, "Authentication required"));
-    }
+return (req, res, next) => {
+  if (!req.user) {
+    return next(createHttpError(401, "Authentication required"));
+  }
 
-    const hasAllowedRole = req.user.roles.some((role) =>
-      allowedRoles.includes(role)
+  const hasAllowedRole = req.user.roles.some((role) =>
+    allowedRoles.includes(role)
+  );
+
+  if (!hasAllowedRole) {
+    return next(
+      createHttpError(
+        403,
+        "You do not have permission to access this resource"
+      )
     );
+  }
 
-    if (!hasAllowedRole) {
-      return next(
-        createHttpError(
-          403,
-          "You do not have permission to access this resource"
-        )
-      );
-    }
-
-    return next();
-  };
+  return next();
+};
 };

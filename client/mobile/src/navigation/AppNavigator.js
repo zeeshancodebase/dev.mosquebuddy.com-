@@ -29,11 +29,13 @@ import MosqueAdminDetailsScreen from "../screens/mosqueAdmin/MosqueAdminDetailsS
 import MosqueAdminEditTimingsScreen from "../screens/mosqueAdmin/MosqueAdminEditTimingsScreen";
 import MosqueAdminEditJumuahScreen from "../screens/mosqueAdmin/MosqueAdminEditJumuahScreen";
 import MosqueAdminReportsScreen from "../screens/mosqueAdmin/MosqueAdminReportsScreen";
+import PostAnnouncementScreen from "../screens/main/PostAnnouncementScreen";
 import VolunteerHomeScreen from "../screens/volunteer/VolunteerHomeScreen";
 
 import FeedbackScreen from "../screens/main/FeedbackScreen.js";
 
 import QiblaScreen from "../screens/main/QiblaScreen";
+import TasbeehScreen from "../screens/main/TasbeehScreen";
 
 import AccountSettingsScreen from "../screens/main/AccountSettingsScreen";
 import DeleteAccountScreen from "../screens/main/DeleteAccountScreen";
@@ -49,6 +51,7 @@ import VolunteerEditTimingsScreen from "../screens/volunteer/VolunteerEditTiming
 import VolunteerEditJumuahScreen from "../screens/volunteer/VolunteerEditJumuahScreen.js";
 import VolunteerReportsScreen from "../screens/volunteer/VolunteerReportsScreen.js";
 import VolunteerSuggestionsScreen from "../screens/volunteer/VolunteerSuggestionsScreen.js";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 function TabIcon({ name, color }) {
   const icons = {
@@ -77,6 +80,8 @@ function TabIcon({ name, color }) {
 // }
 
 function BottomTabs() {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -90,9 +95,9 @@ function BottomTabs() {
           backgroundColor: COLORS.card,
           borderTopColor: COLORS.borderLight,
           borderTopWidth: 1,
-          paddingBottom: 8,
+          paddingBottom: Math.max(insets.bottom, 8),
           paddingTop: 8,
-          height: 65,
+          height: 57 + Math.max(insets.bottom, 8),
         },
         tabBarLabelStyle: {
           fontSize: 11,
@@ -205,6 +210,7 @@ export default function AppNavigator() {
         <RootStack.Screen name="MosqueAdminEditTimings" component={MosqueAdminEditTimingsScreen} options={{ animation: "slide_from_right" }} />
         <RootStack.Screen name="MosqueAdminEditJumuah" component={MosqueAdminEditJumuahScreen} options={{ animation: "slide_from_right" }} />
         <RootStack.Screen name="MosqueAdminReports" component={MosqueAdminReportsScreen} options={{ animation: "slide_from_right" }} />
+        <RootStack.Screen name="PostAnnouncement" component={PostAnnouncementScreen} options={{ animation: "slide_from_right" }} />
         <RootStack.Screen name="VolunteerHome" component={VolunteerHomeScreen} options={{ animation: "slide_from_right" }} />
         <RootStack.Screen name="VolunteerVenueDetail" component={VolunteerVenueDetailScreen} options={{ animation: "slide_from_right" }} />
         <RootStack.Screen name="VolunteerEditTimings" component={VolunteerEditTimingsScreen} options={{ animation: "slide_from_right" }} />
@@ -214,6 +220,10 @@ export default function AppNavigator() {
         <RootStack.Screen
           name="Qibla"
           component={QiblaScreen}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name="Tasbeeh" component={TasbeehScreen}
           options={{ headerShown: false }}
         />
       </RootStack.Navigator>

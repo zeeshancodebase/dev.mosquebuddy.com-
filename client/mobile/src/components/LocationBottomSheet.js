@@ -13,7 +13,7 @@ import {
   Pressable,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { COLORS } from "../constants";
+import { COLORS, INDIA_COUNTRY_ID } from "../constants";
 import { fetchPublicStates, fetchPublicCities, fetchPublicAreas } from "../lib/endpoints";
 import { getUserLocation } from "../lib/location";
 import { LocateFixed, MapPinned } from "lucide-react-native";
@@ -23,7 +23,7 @@ const SHEET_HEIGHT = SCREEN_HEIGHT * 0.72;
 
 // India's countryId — hardcoded for MVP. When multi-country is needed,
 // expose a country selector here and remove this constant.
-const INDIA_COUNTRY_ID = "99381d5d-5d44-4a15-9f2a-fa2cb1bed686";
+// const INDIA_COUNTRY_ID = "99381d5d-5d44-4a15-9f2a-fa2cb1bed686";
 // NOTE: Replace INDIA_COUNTRY_ID with the actual UUID from your DB.
 // Run: SELECT id FROM countries WHERE country_code = 'IN'; in Supabase.
 
@@ -133,6 +133,7 @@ export default function LocationBottomSheet({ visible, onClose, onLocationSelect
       cityId: selectedCity.id,
       label: selectedCity.name,
       stateName: selectedState?.name || "",
+      stateId: selectedState?.id || null,
       areaId: null,
       areaName: null,
     });
@@ -159,6 +160,7 @@ export default function LocationBottomSheet({ visible, onClose, onLocationSelect
       cityId: selectedCity.id,
       label: area.name,
       stateName: selectedState?.name || "",
+      stateId: selectedState?.id || null,
       areaId: area.id,
       areaName: area.name,
     });

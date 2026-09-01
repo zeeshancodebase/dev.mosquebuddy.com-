@@ -189,7 +189,7 @@ export default function RegisterScreen({ navigation }) {
           >
             <Text style={styles.formTitle}>Create account</Text>
             <Text style={styles.formSubtitle}>
-              Join Sabeel and never miss a Jamā'ah
+              Join {APP_CONFIG.name} and never miss a Jamā'ah
             </Text>
 
             <Input

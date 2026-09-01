@@ -10,7 +10,7 @@ import Animated, {
   withSpring, withTiming,
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS } from "../../constants";
+import { APP_CONFIG, COLORS } from "../../constants";
 import { submitFeedback } from "../../lib/endpoints";
 
 const FEEDBACK_TYPES = [
@@ -99,7 +99,7 @@ export default function FeedbackScreen({ navigation }) {
             <Text style={styles.successIcon}>🌟</Text>
             <Text style={styles.successTitle}>JazakAllahu Khair</Text>
             <Text style={styles.successMessage}>
-              Your feedback helps us make Sabeel better for every Muslim.
+              Your feedback helps us make {APP_CONFIG.name} better for every Muslim.
             </Text>
             <TouchableOpacity
               style={styles.successButton}
@@ -127,7 +127,7 @@ export default function FeedbackScreen({ navigation }) {
             </TouchableOpacity>
             <Text style={styles.headerTitle}>Send Feedback</Text>
             <Text style={styles.headerSub}>
-              Help us improve Sabeel — every message is read.
+              Help us improve {APP_CONFIG.name} — every message is read.
             </Text>
           </View>
         </SafeAreaView>
@@ -173,7 +173,7 @@ export default function FeedbackScreen({ navigation }) {
             type === "bug"
               ? "Describe what happened and what you expected instead..."
               : type === "feature_request"
-              ? "What would make Sabeel more useful for you?"
+              ? "What would make {APP_CONFIG.name} more useful for you?"
               : type === "data_quality"
               ? "Tell us which mosque or timing has wrong information..."
               : "Share anything — what you love, what could be better, or ideas..."
@@ -200,7 +200,7 @@ export default function FeedbackScreen({ navigation }) {
         </TouchableOpacity>
 
         <Text style={styles.disclaimer}>
-          Feedback is reviewed by the Sabeel team. For urgent issues with mosque
+          Feedback is reviewed by the {APP_CONFIG.name} team. For urgent issues with mosque
           timings, use "Report Wrong Timing" on the mosque page.
         </Text>
 

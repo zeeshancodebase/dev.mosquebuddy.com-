@@ -1,5 +1,5 @@
 // src/app/catalog/page.jsx
-// Component Catalog — visual reference for all Sabeel UI components
+// Component Catalog — visual reference for all {APP_CONFIG.name} UI components
 "use client";
 
 import { useState } from "react";
@@ -34,6 +34,8 @@ import Tooltip from "@/components/ui/Tooltip";
 import Pagination from "@/components/ui/Pagination";
 import SearchableSelect from "@/components/ui/SearchableSelect";
 import Toggle from "@/components/ui/Toggle";
+import { APP_CONFIG } from "@/lib/constants";
+import CopyToClipboard from "@/components/ui/CopyToClipboard";
 
 // ─── Section wrapper ────────────────────────────────────────────────────────
 function Section({ title, description, children }) {
@@ -100,7 +102,7 @@ export default function CatalogPage() {
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-lg font-bold text-gray-900">
-              Sabeel · Component Catalog
+              {APP_CONFIG.name} · Component Catalog
             </h1>
             <p className="text-xs text-gray-500 mt-0.5">
               Visual reference for all UI components used in the admin panel
@@ -186,6 +188,23 @@ export default function CatalogPage() {
                 Save Changes
               </Button>
             </div>
+          </Preview>
+        </Section>
+
+        {/* ── Copy to Clipboard ─────────────────────────────────────────── */}
+        <Section
+          title="CopyToClipboard"
+          description="Reusable icon-only copy action with tooltip and success feedback."
+        >
+          <Preview label="Examples">
+            <CopyToClipboard value="12.971599, 77.594566" label="coordinates" />
+
+            <CopyToClipboard
+              value="https://maps.google.com/..."
+              label="Maps link"
+            />
+
+            <CopyToClipboard value="user@example.com" label="email" />
           </Preview>
         </Section>
 
@@ -841,7 +860,7 @@ export default function CatalogPage() {
         {/* ── FOOTER ──────────────────────────────────────────── */}
         <div className="mt-12 pt-6 border-t border-gray-200 text-center">
           <p className="text-xs text-gray-400">
-            Sabeel Admin · Component Catalog · All components are
+            {APP_CONFIG.name} Admin · Component Catalog · All components are
             production-ready
           </p>
         </div>

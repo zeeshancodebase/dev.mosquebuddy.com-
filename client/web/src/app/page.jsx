@@ -378,7 +378,7 @@ function Navbar() {
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-3">
           <a
-            href="#download"
+            href={APP_CONFIG.playStoreLink}
             className="px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all duration-200"
             style={{ background: "#059669" }}
             onMouseEnter={(e) => (e.currentTarget.style.background = "#047857")}
@@ -422,7 +422,7 @@ function Navbar() {
             </a>
           ))}
           <a
-            href="#download"
+            href={APP_CONFIG.playStoreLink}
             onClick={() => setMobileOpen(false)}
             className="block mt-4 px-4 py-3 rounded-xl text-sm font-semibold text-white text-center"
             style={{ background: "#059669" }}
@@ -727,7 +727,7 @@ export default function LandingPage() {
                 className="text-4xl font-black mb-4"
                 style={{ color: "#0C1A14", letterSpacing: "-0.02em" }}
               >
-                How Sabeel works
+                How {APP_CONFIG.name} works
               </h2>
               <p className="text-gray-500 max-w-xl mx-auto">
                 From opening the app to reaching the mosque in under a minute.
@@ -749,7 +749,7 @@ export default function LandingPage() {
                 step: "01",
                 icon: MapPin,
                 title: "Find mosques near you",
-                desc: "Open Sabeel and instantly see all mosques and prayer venues in your area, sorted by distance.",
+                desc: `Open ${APP_CONFIG.name} and instantly see all mosques and prayer venues in your area, sorted by distance.`,
               },
               {
                 step: "02",
@@ -1088,7 +1088,7 @@ export default function LandingPage() {
                   {
                     icon: Smartphone,
                     title: "Manage from your phone",
-                    desc: "No laptop needed. Update timings from the Sabeel app in seconds.",
+                    desc: `No laptop needed. Update timings from the ${APP_CONFIG.name} app in seconds.`,
                   },
                 ].map((item, i) => {
                   const Icon = item.icon;
@@ -1242,7 +1242,7 @@ export default function LandingPage() {
               {[
                 { label: "Features", href: "#features" },
                 { label: "For Mosques", href: "#mosques" },
-                { label: "Download", href: "#download" },
+                { label: "Download", href: APP_CONFIG.playStoreLink },
                 { label: "Feedback", href: "/feedback" },
               ].map((link) => (
                 <a

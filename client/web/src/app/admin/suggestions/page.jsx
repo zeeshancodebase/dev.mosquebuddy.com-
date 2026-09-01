@@ -25,6 +25,8 @@ import toast from "react-hot-toast";
 import { api } from "@/lib/api";
 import { PageLoader } from "@/components/ui/Spinner";
 import Pagination from "@/components/ui/Pagination";
+import { APP_CONFIG } from "@/lib/constants";
+import CopyToClipboard from "@/components/ui/CopyToClipboard";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const VENUE_TYPE_LABELS = {
@@ -151,13 +153,29 @@ function SuggestionDetailModal({
               { label: "State", value: suggestion.stateText },
               { label: "Country", value: suggestion.countryText },
               { label: "Pincode", value: suggestion.pincode },
+              { label: "Latitude", value: suggestion.latitude, copy: true },
+              { label: "Longitude", value: suggestion.longitude, copy: true },
               { label: "Phone", value: suggestion.phone || "—" },
-            ].map(({ label, value }) => (
-              <div key={label} className="grid grid-cols-5 px-4 py-2.5 text-sm">
+            ].map(({ label, value, copy }) => (
+              <div
+                key={label}
+                className="grid grid-cols-5 px-4 py-2.5 text-sm items-center"
+              >
                 <span className="col-span-2 text-gray-400">{label}</span>
-                <span className="col-span-3 text-gray-800 font-medium">
-                  {value || "—"}
-                </span>
+
+                <div className="col-span-3 flex items-center gap-2">
+                  <span className="text-gray-800 font-medium">
+                    {value || "—"}
+                  </span>
+
+                  {copy && value && (
+                    <CopyToClipboard
+                      value={value}
+                      label={label.toLowerCase()}
+                      successMessage={`${label} copied!`}
+                    />
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -367,7 +385,7 @@ export default function SuggestionsPage() {
       {/* Page header */}
       <PageHeader
         title="Venue Suggestions"
-        subtitle="Review mosques and prayer venues suggested by users that are missing from Sabeel."
+        subtitle={`Review mosques and prayer venues suggested by users that are missing from ${APP_CONFIG.name}.`}
         actions={
           pending > 0 && (
             <Badge variant="warning" dot>
@@ -695,7 +713,7 @@ export default function SuggestionsPage() {
 //     googleMapsLink: "https://maps.google.com/?q=Masjid+Bilal+Rajajinagar",
 //     phone: "+91 80 2345 6789",
 //     optionalTimingNote: "All 5 prayers with jamā'ah. Jumu'ah at 1:00 PM.",
-//     userNote: "Active mosque, recently renovated. Should definitely be on Sabeel.",
+//     userNote: "Active mosque, recently renovated. Should definitely be on {APP_CONFIG.name}.",
 //     status: "pending",
 //     submittedBy: { name: "Hassan Baig", email: "hassan@example.com" },
 //     createdAt: "2026-06-14T07:10:00Z",
@@ -940,7 +958,7 @@ export default function SuggestionsPage() {
 //       {/* Page header */}
 //       <PageHeader
 //         title="Venue Suggestions"
-//         subtitle="Review mosques and prayer venues suggested by users that are missing from Sabeel."
+//         subtitle="Review mosques and prayer venues suggested by users that are missing from {APP_CONFIG.name}."
 //         actions={
 //           pending > 0 && (
 //             <Badge variant="warning" dot>

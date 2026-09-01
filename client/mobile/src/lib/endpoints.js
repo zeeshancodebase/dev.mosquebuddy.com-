@@ -76,6 +76,18 @@ export function submitFeedback(body) {
 }
 
 
+// ── Super Admin Announcements ──
+export function postAdminAnnouncement(body) {
+  return api.post(`/admin/announcements`, body);
+}
+
+// ── Admin Venue Search (Super Admin — venue scope for announcements) ──
+export function searchAdminVenues(search) {
+  return api.get(`/venues${buildQueryString({ search, limit: 20 })}`);
+}
+
+
+
 // ── Mosque Admin ──
 export function fetchMyVenues() {
   return api.get("/mosque-admin/my-venues");
@@ -103,6 +115,10 @@ export function fetchMyMosqueReports(params = {}) {
 }
 export function updateMosqueReportStatus(reportId, body) {
   return api.patch(`/mosque-admin/reports/${reportId}/status`, body);
+}
+
+export function postVenueAnnouncement(venueId, body) {
+  return api.post(`/mosque-admin/venues/${venueId}/announcements`, body);
 }
 
 // ── Volunteer ──
@@ -145,14 +161,19 @@ export function updateVolunteerReportStatus(reportId, body) {
 export function updateVolunteerSuggestionStatus(suggestionId, body) {
   return api.patch(`/volunteer/suggestions/${suggestionId}/status`, body);
 }
+// ── Volunteer Announcements ──
+export function postVolunteerAnnouncement(body) {
+  return api.post(`/volunteer/announcements`, body);
+}
+
 
 
 
 // ── Locations ──
 
 export function fetchPublicStates(countryId) {
-    return api.get(`/public/locations/states?countryId=${countryId}`);
- 
+  return api.get(`/public/locations/states?countryId=${countryId}`);
+
 }
 
 export function fetchPublicCities(stateId) {
@@ -163,7 +184,22 @@ export function fetchPublicAreas(cityId) {
   return api.get(`/public/locations/areas?cityId=${cityId}`);
 }
 
+
+export const resolveMapsLink = (url) =>
+  api.post("/utils/resolve-maps-link", { url });
+
 // ── Auth (Self-Service Account Deletion) ──
 export function deleteMyAccount(password) {
   return api.deleteWithBody("/auth/delete-account", { password });
 }
+
+
+// ── Announcements (Home screen) ──
+export function fetchPublicAnnouncements(params = {}) {
+  // At least one of venueId, areaId, cityId, stateId is required.
+  // optional: page, limit
+  return api.get(`/public/announcements${buildQueryString(params)}`);
+}
+
+
+export const postFeatureInterest = (featureKey) => api.post('/feature-interest', { featureKey });

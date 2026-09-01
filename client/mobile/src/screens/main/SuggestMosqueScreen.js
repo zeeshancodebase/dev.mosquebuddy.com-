@@ -21,13 +21,14 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS } from "../../constants";
+import { APP_CONFIG, COLORS } from "../../constants";
 import {
   submitVenueSuggestion, fetchCountries,
   fetchStates,
   fetchCities,
   fetchAreas,
 } from "../../lib/endpoints";
+import LocationPicker from "../../components/LocationPicker";
 
 const VENUE_TYPE_OPTIONS = [
   { key: "masjid", label: "Masjid" },
@@ -183,6 +184,8 @@ export default function SuggestMosqueScreen({ navigation }) {
   const [cityText, setCityText] = useState("");
   const [address, setAddress] = useState("");
   const [googleMapsLink, setGoogleMapsLink] = useState("");
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
   const [userNote, setUserNote] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -410,6 +413,7 @@ export default function SuggestMosqueScreen({ navigation }) {
             : {}),
         ...(address.trim() && { address: address.trim() }),
         ...(googleMapsLink.trim() && { googleMapsLink: googleMapsLink.trim() }),
+        ...(latitude !== null && longitude !== null && { latitude, longitude }),
         ...(userNote.trim() && { userNote: userNote.trim() }),
       };
 
@@ -441,7 +445,7 @@ export default function SuggestMosqueScreen({ navigation }) {
             <Text style={styles.successTitle}>Suggestion Submitted</Text>
             <Text style={styles.successMessage}>{contributionMessage}</Text>
             <Text style={styles.successSub}>
-              Our team will verify and add this mosque to Sabeel. You'll help
+              Our team will verify and add this mosque to {APP_CONFIG.name}. You'll help
               other Muslims find a place to pray — JazakAllahu khair.
             </Text>
             <TouchableOpacity
@@ -475,7 +479,7 @@ export default function SuggestMosqueScreen({ navigation }) {
             </TouchableOpacity>
             <Text style={styles.headerTitle}>Suggest a Mosque</Text>
             <Text style={styles.headerSub}>
-              Know a mosque that's missing from Sabeel? Help the community.
+              Know a mosque that's missing from {APP_CONFIG.name}? Help the community.
             </Text>
           </View>
         </SafeAreaView>
@@ -578,6 +582,11 @@ export default function SuggestMosqueScreen({ navigation }) {
           value={cityText}
           onChange={setCityText}
           placeholder="e.g. Bengaluru"
+        /><FormInput
+          label="Google Maps Link (optional)"
+          value={googleMapsLink}
+          onChange={setGoogleMapsLink}
+          placeholder="Paste a Google Maps link"
         /> */}
         <FormInput
           label="Address (optional)"
@@ -586,11 +595,31 @@ export default function SuggestMosqueScreen({ navigation }) {
           placeholder="Street address or landmark"
           multiline
         />
-        <FormInput
-          label="Google Maps Link (optional)"
-          value={googleMapsLink}
-          onChange={setGoogleMapsLink}
-          placeholder="Paste a Google Maps link"
+
+        {/* 
+        this is for extracting coordinates from a Google Maps link, but we are not using it for now
+        <LocationPicker
+          onLocationSelected={(coords, source, rawLink) => {
+            setLatitude(coords.latitude);
+            setLongitude(coords.longitude);
+            if (source === "link" && rawLink) {
+              setGoogleMapsLink(rawLink);
+            }
+          }}
+        /> */}
+
+        <LocationPicker
+          onLocationSelected={(coords, source, rawLink) => {
+            if (source === "link" && rawLink) {
+              setGoogleMapsLink(rawLink);
+              return;
+            }
+
+            if (coords) {
+              setLatitude(coords.latitude);
+              setLongitude(coords.longitude);
+            }
+          }}
         />
 
         {/* ── Note ── */}
@@ -613,7 +642,7 @@ export default function SuggestMosqueScreen({ navigation }) {
           <Text style={styles.infoText}>
             🔒 Your suggestion goes to our review team. Mosques are not added
             automatically — we verify each suggestion before publishing. This
-            keeps Sabeel's data trustworthy.
+            keeps {APP_CONFIG.name}'s data trustworthy.
           </Text>
         </View>
 

@@ -5,18 +5,20 @@ export const APP_CONFIG = {
   nameArabic: "مسجد کا ساتھی",
   tagline: "Find nearby mosques and never miss a Jamā'ah",
 
-//   رفيق المسجد (Rafiq al-Masjid) — "companion of the mosque"
-// Urdu: مسجد کا ساتھی (Masjid ka Sathi)
+  //   رفيق المسجد (Rafiq al-Masjid) — "companion of the mosque"
+  // Urdu: مسجد کا ساتھی (Masjid ka Sathi)
 
   // Temporary until the app is published
-  website: "https://MosqueBuddy.com",
+  website: "https://mosquebuddy.vercel.app",
 
   // Share this with others
-  appStoreUrl: "https://play.google.com/store/apps/details?id=com.sabeel.app",
+  playStoreLink: "https://play.google.com/store/apps/details?id=com.mosquebuddy.app",
+
+  appStoreUrl: "#", // placeholder for now
 
   // Open directly to ratings
   appReviewUrl:
-    "https://play.google.com/store/apps/details?id=com.sabeel.app&showAllReviews=true",
+    "https://play.google.com/store/apps/details?id=com.mosquebuddy.app&showAllReviews=true",
 };
 
 export const COLORS = {
@@ -128,9 +130,31 @@ export const FACILITIES = {
   unknown: "Unknown",
 };
 
-export const API_BASE_URL = "https://sabeel-staging-500201.el.r.appspot.com/api";
+export const FEATURE_KEYS = {
+  HALAL_RESTAURANT_FINDER: 'halal_restaurant_finder',
+};
 
-// export const API_BASE_URL = "http://192.168.1.77:5000/api";
+// Dev Country ID for India (used for testing)
+export const INDIA_COUNTRY_ID = "99381d5d-5d44-4a15-9f2a-fa2cb1bed686";
+
+// Prod Country ID for India
+// export const INDIA_COUNTRY_ID =  "d773dd25-ae44-4f43-807b-9b7fe8ce7c3b";
+
+
+
+export const DEFAULT_REGION = {
+  // Rough India center fallback for the pin-drop map before a location is chosen
+  latitude: 20.5937,
+  longitude: 78.9629,
+  latitudeDelta: 8,
+  longitudeDelta: 8,
+};
+
+
+
+// export const API_BASE_URL = "https://sabeel-staging-500201.el.r.appspot.com/api";
+
+export const API_BASE_URL = "http://192.168.1.77:5000/api";
 
 // export const API_BASE_URL = "http://YOUR_PC_IP:5000/api";
 

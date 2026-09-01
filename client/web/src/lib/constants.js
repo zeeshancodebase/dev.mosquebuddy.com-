@@ -29,7 +29,7 @@ export const APP_CONFIG = {
   taglinePublic: "Find nearby mosques and never miss a Jamā'ah",
   descriptionPublic: "MosqueBuddy helps Muslims find accurate mosque timings, Jumu'ah slots, and directions — all in one place.",
   appStoreLink: "#",        // placeholder
-  playStoreLink: "#",       // placeholder
+  playStoreLink: "https://play.google.com/store/apps/details?id=com.mosquebuddy.app",      
   mosqueAdminLink: "/login", // mosque admins go to admin login
   version: "1.0.0",
   SUPPORT_EMAIL:"support@mosquebuddy.app",

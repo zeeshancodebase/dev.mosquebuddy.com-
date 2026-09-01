@@ -27,6 +27,7 @@ import { PageLoader } from "@/components/ui/Spinner";
 import Modal from "@/components/ui/Modal";
 import Textarea from "@/components/ui/Textarea";
 import { notify } from "@/lib/toast";
+import LocationPicker from "@/components/ui/LocationPicker";
 
 const venueTypeOptions = Object.entries(VENUE_TYPES).map(([value, label]) => ({
   value,
@@ -568,7 +569,17 @@ export default function VenuesPage() {
                   onChange={handleFormChange}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <LocationPicker
+                latitude={form.latitude}
+                longitude={form.longitude}
+                onChange={(updates) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    ...updates,
+                  }))
+                }
+              />
+              {/* <div className="grid grid-cols-2 gap-3">
                 <Input
                   label="Latitude"
                   name="latitude"
@@ -583,7 +594,7 @@ export default function VenuesPage() {
                   value={form.longitude}
                   onChange={handleFormChange}
                 />
-              </div>
+              </div> */}
               <Input
                 label="Google Maps Link"
                 name="googleMapsLink"

@@ -18,7 +18,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { COLORS, PRAYER_NAMES } from "../../constants";
+import { APP_CONFIG, COLORS, PRAYER_NAMES } from "../../constants";
 import { submitTimingReport } from "../../lib/endpoints";
 import TimePicker from "../../components/TimePicker";
 
@@ -408,7 +408,7 @@ export default function ReportTimingScreen({ navigation, route }) {
           <Text style={styles.infoText}>
             🔒 Your report goes to our review team. Timings are not changed
             automatically — a verified person reviews each report before any
-            update is made. This keeps Sabeel trustworthy.
+            update is made. This keeps ${APP_CONFIG.name} trustworthy.
           </Text>
         </View>
 
