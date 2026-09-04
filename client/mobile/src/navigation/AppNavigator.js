@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, ActivityIndicator } from "react-native";
 import { useAuth } from "../context/AuthContext";
 import { COLORS } from "../constants";
+import mobileAds from "react-native-google-mobile-ads";
 
 // Auth Screens
 import LoginScreen from "../screens/auth/LoginScreen";
@@ -136,6 +137,12 @@ function LoadingScreen() {
 
 export default function AppNavigator() {
   const { isLoading, hasSeenWelcome } = useAuth();
+
+   React.useEffect(() => {
+    mobileAds()
+      .initialize()
+      .then(() => console.log("AdMob initialized"));
+  }, []);
 
   if (isLoading) return <LoadingScreen />;
 

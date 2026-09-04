@@ -30,6 +30,7 @@ import { adaptVenueList } from "../../lib/adapters";
 import { useLocation } from "../../context/LocationContext";
 import ExpandingFAB from "../../components/ExpandingFAB";
 import { Map, MapPinned } from "lucide-react-native";
+import BannerAdSlot from "../../components/BannerAdSlot";
 
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -280,6 +281,7 @@ export default function NearbyScreen({ navigation }) {
           navigation.navigate("VenueDetail", { venueId: venue.id })
         }
       />
+      <BannerAdSlot />
     </View>
   );
 }
