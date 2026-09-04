@@ -135,10 +135,10 @@ export const FEATURE_KEYS = {
 };
 
 // Dev Country ID for India (used for testing)
-export const INDIA_COUNTRY_ID = "99381d5d-5d44-4a15-9f2a-fa2cb1bed686";
+// export const INDIA_COUNTRY_ID = "99381d5d-5d44-4a15-9f2a-fa2cb1bed686";
 
 // Prod Country ID for India
-// export const INDIA_COUNTRY_ID =  "d773dd25-ae44-4f43-807b-9b7fe8ce7c3b";
+export const INDIA_COUNTRY_ID = "d773dd25-ae44-4f43-807b-9b7fe8ce7c3b";
 
 
 
@@ -152,9 +152,9 @@ export const DEFAULT_REGION = {
 
 
 
-// export const API_BASE_URL = "https://sabeel-staging-500201.el.r.appspot.com/api";
+export const API_BASE_URL = "https://sabeel-staging-500201.el.r.appspot.com/api";
 
-export const API_BASE_URL = "http://192.168.1.77:5000/api";
+// export const API_BASE_URL = "http://192.168.1.77:5000/api";
 
 // export const API_BASE_URL = "http://YOUR_PC_IP:5000/api";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { LocateFixed, Link2, MapPinned } from "lucide-react";
+import { LocateFixed, Link2, MapPinned, Pencil } from "lucide-react";
 
 const DEFAULT_CENTER = { lat: 20.5937, lng: 78.9629 }; // India center fallback
 
@@ -200,6 +200,16 @@ export default function LocationPicker({ latitude, longitude, onChange }) {
             Drop a pin
           </span>
         </button>
+        <button
+          type="button"
+          onClick={() => setMode("manual")}
+          className={tabClass(mode === "manual")}
+        >
+          <span className="flex items-center gap-1.5">
+            <Pencil size={16} />
+            Enter manually
+          </span>
+        </button>
       </div>
 
       {mode === "gps" && (
@@ -264,6 +274,37 @@ export default function LocationPicker({ latitude, longitude, onChange }) {
             ref={mapDivRef}
             className="w-full h-64 rounded-lg border border-gray-300"
           />
+        </div>
+      )}
+      {mode === "manual" && (
+        <div className="flex flex-col gap-3">
+          <p className="text-xs text-gray-500">
+            Enter the exact coordinates manually.
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1">
+              <label className="text-xs text-gray-500">Latitude</label>
+              <input
+                type="text"
+                inputMode="decimal"
+                placeholder="e.g. 12.9165"
+                value={latitude ?? ""}
+                onChange={(e) => onChange({ latitude: e.target.value })}
+                className="px-3.5 py-2.5 text-sm rounded-lg border border-gray-300"
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-xs text-gray-500">Longitude</label>
+              <input
+                type="text"
+                inputMode="decimal"
+                placeholder="e.g. 77.6101"
+                value={longitude ?? ""}
+                onChange={(e) => onChange({ longitude: e.target.value })}
+                className="px-3.5 py-2.5 text-sm rounded-lg border border-gray-300"
+              />
+            </div>
+          </div>
         </div>
       )}
     </div>

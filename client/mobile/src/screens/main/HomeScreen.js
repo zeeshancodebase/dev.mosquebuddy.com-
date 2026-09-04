@@ -10,6 +10,7 @@ import {
   StatusBar,
   Dimensions,
   Pressable,
+  Alert,
 } from "react-native";
 import Animated, {
   useSharedValue,
@@ -250,7 +251,7 @@ function JumuahBanner({
 
 // ─── Main Screen ──────────────────────────────────────────────
 export default function HomeScreen({ navigation }) {
-  const { user } = useAuth();
+  const { user, isLoggedIn } = useAuth();
   const {
     locationContext,
     locationLabel,
@@ -453,6 +454,29 @@ export default function HomeScreen({ navigation }) {
     venues[0]?.state?.id ||
     (locationContext?.type === "manual" ? locationContext.stateId : null) ||
     null;
+
+
+  function handleSuggestMosque() {
+    if (isLoggedIn) {
+      navigation.navigate("SuggestMosque");
+      return;
+    }
+
+    Alert.alert(
+      "Sign in required",
+      "Please sign in to suggest a mosque.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Login",
+          onPress: () => navigation.navigate("Login"),
+        },
+      ]
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -776,7 +800,7 @@ export default function HomeScreen({ navigation }) {
             <ActionTile icon="🔍" title="Search" subtitle="By name or area" accent={COLORS.primary}
               onPress={() => navigation.navigate("Search")} />
             <ActionTile icon="➕" title="Add Mosque" subtitle={`Missing from ${APP_CONFIG.name}?`} accent="#8B5CF6"
-              onPress={() => navigation.navigate("SuggestMosque")} />
+              onPress={handleSuggestMosque} />
             <LongPressHint text="Find the direction to pray toward">
               <ActionTile icon="🧭" title="Qibla" subtitle="Find direction" accent="#059669"
                 onPress={() => navigation.navigate("Qibla")} />

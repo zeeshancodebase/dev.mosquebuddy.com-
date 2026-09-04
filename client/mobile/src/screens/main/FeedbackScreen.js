@@ -173,7 +173,7 @@ export default function FeedbackScreen({ navigation }) {
             type === "bug"
               ? "Describe what happened and what you expected instead..."
               : type === "feature_request"
-              ? "What would make {APP_CONFIG.name} more useful for you?"
+              ? `What would make ${APP_CONFIG.name} more useful for you?`
               : type === "data_quality"
               ? "Tell us which mosque or timing has wrong information..."
               : "Share anything — what you love, what could be better, or ideas..."

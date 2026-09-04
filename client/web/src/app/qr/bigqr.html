@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MosqueBuddy — QR Poster Sheet (4-up)</title>
+    <style>
+        :root {
+            --forest: #0C1A14;
+            --emerald: #059669;
+            --gold: #D4A843;
+            --cream: #F0F4F2;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #e7e7e7;
+            padding: 24px;
+        }
+
+        .toolbar {
+            max-width: 900px;
+            margin: 0 auto 20px auto;
+            background: var(--forest);
+            color: var(--cream);
+            padding: 16px 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar p {
+            margin-top: 4px;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .toolbar h2 {
+            font-size: 17px;
+        }
+
+        .toolbar button {
+            background: var(--emerald);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .toolbar button:hover {
+            background: #047857;
+        }
+
+        /* ---- SHEET: hard-capped to exactly A4 ---- */
+        .sheet {
+            width: 210mm;
+            height: 297mm;
+            margin: 0 auto;
+            background: white;
+            padding: 4mm;
+            box-sizing: border-box;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 134mm);
+            row-gap: 8mm;
+            column-gap: 3mm;
+            overflow: hidden;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card {
+            width: 98mm;
+            height: 138mm;
+            display: flex;
+            flex-direction: column;
+            border-radius: 5mm;
+            border: 1px solid #d8ddda;
+            overflow: hidden;
+            position: relative;
+            background: white;
+            box-shadow: 0 1mm 3mm rgba(0, 0, 0, 0.08);
+        }
+
+        /* cut guide corners, sit on top */
+        .cut-corner {
+            position: absolute;
+            width: 3mm;
+            height: 3mm;
+            border-color: #aab2ad;
+            z-index: 10;
+        }
+
+        .cut-corner.tl {
+            top: 0;
+            left: 0;
+            border-top: 1px solid;
+            border-left: 1px solid;
+        }
+
+        .cut-corner.tr {
+            top: 0;
+            right: 0;
+            border-top: 1px solid;
+            border-right: 1px solid;
+        }
+
+        .cut-corner.bl {
+            bottom: 0;
+            left: 0;
+            border-bottom: 1px solid;
+            border-left: 1px solid;
+        }
+
+        .cut-corner.br {
+            bottom: 0;
+            right: 0;
+            border-bottom: 1px solid;
+            border-right: 1px solid;
+        }
+
+        .header-band {
+            background: var(--forest);
+            background-image: repeating-linear-gradient(45deg,
+                    rgba(212, 168, 67, 0.10) 0px,
+                    rgba(212, 168, 67, 0.10) 2px,
+                    transparent 2px,
+                    transparent 9px);
+            height: 16mm;
+            padding: 0 4mm;
+            display: flex;
+            align-items: center;
+            gap: 2.5mm;
+            flex-shrink: 0;
+        }
+
+        .logo-mark {
+            width: 9mm;
+            height: 9mm;
+            border-radius: 50%;
+            background: var(--forest);
+            border: 1.2px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5mm;
+            flex-shrink: 0;
+        }
+
+        .logo-mark img {
+            margin-left: 0.5px;
+            margin-top: -0.5px;
+            width: 8mm;
+            height: 8mm;
+            border-radius: 50%;
+
+        }
+
+        .header-text {
+            text-align: left;
+            line-height: 1.15;
+        }
+
+        .brand-name {
+            font-size: 5mm;
+            font-weight: 800;
+            color: white;
+        }
+
+        .brand-name span {
+            color: var(--gold);
+        }
+
+        .brand-urdu {
+            font-size: 2.8mm;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 3mm 4mm;
+        }
+
+        .headline {
+            margin-top: 1mm;
+            font-size: 4.4mm;
+            font-weight: 800;
+            color: var(--forest);
+            line-height: 1.25;
+        }
+
+        .benefits-row {
+            margin-top: 2.5mm;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            gap: 1mm;
+        }
+
+        .benefit {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5mm;
+        }
+
+        .benefit .icon {
+            font-size: 5mm;
+        }
+
+        .benefit .label {
+            font-size: 2.5mm;
+            font-weight: 700;
+            color: var(--forest);
+            line-height: 1.15;
+        }
+
+        .qr-wrap {
+            margin-top: 3mm;
+            position: relative;
+            width: 65mm;
+            height: 65mm;
+        }
+
+        .qr-box {
+            width: 65mm;
+            height: 65mm;
+            border: 2.5px solid var(--gold);
+            border-radius: 3mm;
+            background: repeating-linear-gradient(45deg, #f7f9f8, #f7f9f8 6px, #eef2f0 6px, #eef2f0 12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .qr-box::before,
+        .qr-box::after {
+            content: "";
+            position: absolute;
+            background: var(--emerald);
+            opacity: 0.5;
+        }
+
+        .qr-box::before {
+            width: 100%;
+            height: 1px;
+            top: 50%;
+        }
+
+        .qr-box::after {
+            height: 100%;
+            width: 1px;
+            left: 50%;
+        }
+
+        .qr-box.has-qr {
+            background: white;
+        }
+
+        .qr-box.has-qr::before,
+        .qr-box.has-qr::after {
+            display: none;
+        }
+
+        .qr-image {
+            width: 60mm;
+            height: 60mm;
+            object-fit: contain;
+            display: block;
+        }
+
+        .qr-label {
+            font-size: 2.6mm;
+            color: var(--emerald);
+            font-weight: 700;
+            background: white;
+            padding: 1mm 1.5mm;
+            border-radius: 1mm;
+            z-index: 2;
+        }
+
+        .ribbon {
+            position: absolute;
+            top: -2.5mm;
+            right: -7mm;
+            background: var(--gold);
+            color: var(--forest);
+            font-size: 2.6mm;
+            font-weight: 800;
+            padding: 1.2mm 3.5mm;
+            border-radius: 1mm;
+            transform: rotate(12deg);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            z-index: 5;
+
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .cta-line {
+            margin-top: 2.5mm;
+            color: var(--emerald);
+            font-size: 4mm;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+        }
+
+        .trust-line {
+            margin-top: 1.5mm;
+            font-size: 2.6mm;
+            color: var(--forest);
+            font-weight: 600;
+            opacity: 0.85;
+        }
+
+        .bottom-bar {
+            height: 2mm;
+            background: linear-gradient(90deg, var(--gold), var(--emerald));
+            flex-shrink: 0;
+        }
+
+        .mosque-tag {
+            margin-top: 2mm;
+            font-size: 2.8mm;
+            font-weight: 600;
+            color: var(--gold);
+            background: var(--forest);
+            padding: 1.2mm 3mm;
+            border-radius: 1.5mm;
+            letter-spacing: 0.2px;
+        }
+
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .toolbar {
+                display: none;
+            }
+
+            .sheet {
+                box-shadow: none;
+                margin: 0;
+            }
+
+            .card {
+                box-shadow: none;
+            }
+
+            @page {
+                size: A4;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="toolbar">
+        <div>
+            <h2>MosqueBuddy — QR Poster Sheet (4-up)</h2>
+            <p>4 large poster-stickers per A4 · QR is 60mm × 60mm · print at 100% scale</p>
+        </div>
+        <button onclick="window.print()">🖨️ Print this sheet</button>
+    </div>
+
+    <div class="sheet"></div>
+
+    <script>
+        const QR_IMAGE = 'MosqueBuddy_QR.png';
+        const sheet = document.querySelector('.sheet');
+
+        for (let i = 0; i < 4; i++) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+        <div class="cut-corner tl"></div>
+        <div class="cut-corner tr"></div>
+        <div class="cut-corner bl"></div>
+        <div class="cut-corner br"></div>
+
+        <div class="header-band">
+          <div class="logo-mark"><img src="mosquebuddy_logo.png" alt="MosqueBuddy Logo"></div>
+          <div class="header-text">
+            <div class="brand-name">Mosque<span>Buddy</span></div>
+            <div class="brand-urdu">مسجد کا ساتھی</div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="headline">Find Nearby Masjids &<br>Live Jamā'ah Timings</div>
+
+          <div class="benefits-row">
+            <div class="benefit"><div class="icon">📍</div><div class="label">Nearby<br>Masjids</div></div>
+            <div class="benefit"><div class="icon">🕌</div><div class="label">Jamā'ah<br>Timings</div></div>
+            <div class="benefit"><div class="icon">🕋</div><div class="label">Jumu'ah<br>Slots</div></div>
+          </div>
+
+          <div class="qr-wrap">
+            <div class="ribbon">FREE APP</div>
+            <div class="qr-box">
+              <span class="qr-label">PASTE QR<br>60×60mm</span>
+            </div>
+          </div>
+
+          <div class="cta-line">📲 SCAN TO DOWNLOAD</div>
+          <div class="trust-line">✅ Community-verified · Updated by local mosques</div>
+          <div class="mosque-tag">🕌 This masjid is listed on MosqueBuddy</div>
+        </div>
+
+        <div class="bottom-bar"></div>
+      `;
+            sheet.appendChild(card);
+
+            const img = new Image();
+            img.onload = function () {
+                const qrBox = card.querySelector('.qr-box');
+                qrBox.innerHTML = '';
+                qrBox.classList.add('has-qr');
+                img.className = 'qr-image';
+                img.alt = 'MosqueBuddy QR Code';
+                qrBox.appendChild(img);
+            };
+            img.onerror = function () { };
+            img.src = QR_IMAGE;
+        }
+    </script>
+
+</body>
+
+</html>
+<!-- <div class="logo-mark">🕌</div> -->
